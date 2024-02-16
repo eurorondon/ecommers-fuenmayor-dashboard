@@ -1,10 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path, { resolve } from "path";
-
 import { v2 as cloudinary } from "cloudinary";
-import { promises } from "dns";
-import { rejects } from "assert";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -24,11 +19,6 @@ export async function POST(request) {
 
   const bytes = await image.arrayBuffer();
   const buffer = Buffer.from(bytes);
-
-  // const filePath = path.join(process.cwd(), "public", image.name);
-  // console.log(filePath);
-
-  // await writeFile(filePath, buffer);
 
   const response = await new Promise((resolve, reject) => {
     cloudinary.uploader
