@@ -4,6 +4,7 @@ import Link from "next/link";
 
 const Product = (props) => {
   const { product, handleDelete } = props;
+
   // const dispatch = useDispatch();
 
   // const deletehandler = (id) => {
@@ -47,12 +48,12 @@ const Product = (props) => {
           </Link>
           <div className="info-wrap">
             <Link href="#" className="title text-truncate">
-              {product.name}
+              {product?.name}
             </Link>
-            <div className="price mb-2">${product.price}</div>
+            <div className="price mb-2">${product?.price}</div>
             <div className="absolute bottom-2">
               <Link
-                href={`/product/${product.id}/edit`}
+                href={`/product/${product?.id}/edit`}
                 className="bg-green-500 mr-2 text-white px-4 py-2 rounded-md hover:bg-green-600 p-2 pb-3 col-span-6 md:col-span-3"
               >
                 <i className="fas fa-pen">Edit</i>
@@ -60,7 +61,7 @@ const Product = (props) => {
               <button
                 onClick={() =>
                   handleDelete
-                    ? handleDelete(product.id)
+                    ? handleDelete(product?.id)
                     : console.log("no existe handleDelete")
                 }
                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 p-2 pb-3 col-span-6 md:col-span-3"

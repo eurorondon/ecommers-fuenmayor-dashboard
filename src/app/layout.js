@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "./components/sidebar";
-import Link from "next/link";
+import ReactQueryProvider from "./components/providers/ReactQueryProvider";
+import Sidebar from "./components/Sidebar";
+import Product from "./components/Product";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,16 +15,18 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex">
-          <div className="w-1/6">
-            {/* Contenido del slider */}
-            <Sidebar />
+        <ReactQueryProvider>
+          <div className="flex">
+            <div className="w-1/6">
+              {/* Contenido del slider */}
+              <Sidebar />
+            </div>
+            <div className="w-5/6">
+              {/* Contenido del otro componente */}
+              {children}
+            </div>
           </div>
-          <div className="w-5/6">
-            {/* Contenido del otro componente */}
-            {children}
-          </div>
-        </div>
+        </ReactQueryProvider>
       </body>
     </html>
   );

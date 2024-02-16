@@ -2,16 +2,26 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import amplifyconfig from "@/aws-exports";
-import { listProducts } from "@/graphql/queries";
 import { useEffect, useState } from "react";
 import Product from "../components/Product";
 import { deleteProduct } from "@/graphql/mutations";
+import { getProducts } from "@/utils/graphqlFunctions";
+import { useQuery } from "react-query";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
 
 function Productos() {
   const [productos, setProductos] = useState(null);
+  const { data } = useQuery("test", getProducts);
+
+  useEffect(() => {
+    if (data) {
+      setProductos(data);
+    }
+  }, [data]);
+
+  console.log(productos);
 
   const handleDelete = async (id) => {
     const userConfirmed = window.confirm("Do you want to delete?");
@@ -31,23 +41,8 @@ function Productos() {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await client.graphql({
-          query: listProducts,
-          variables: {},
-        });
-        if (data) setProductos(data.data.listProducts.items);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
-
-  // if (productos) console.log(prodcutos);
   return (
-    <div className="container  my-20 grid grid-cols-5 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="container my-20 grid grid-cols-5 md:grid-cols-2 lg:grid-cols-5 gap-4">
       {productos &&
         productos.map((product) => (
           <div className="" key={product.id}>
