@@ -114,8 +114,32 @@ export const createCategories = /* GraphQL */ `
     createCategories(input: $input, condition: $condition) {
       id
       categoryName
+      description
+      imgUrl
       createdAt
       updatedAt
+      __typename
+    }
+  }
+`;
+
+export const listCategories = /* GraphQL */ `
+  query ListCategories(
+    $filter: ModelCategoriesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        categoryName
+        description
+        imgUrl
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
       __typename
     }
   }
@@ -128,6 +152,8 @@ export const updateCategories = /* GraphQL */ `
     updateCategories(input: $input, condition: $condition) {
       id
       categoryName
+      description
+      imgUrl
       createdAt
       updatedAt
       __typename
@@ -142,6 +168,8 @@ export const deleteCategories = /* GraphQL */ `
     deleteCategories(input: $input, condition: $condition) {
       id
       categoryName
+      description
+      imgUrl
       createdAt
       updatedAt
       __typename

@@ -3,23 +3,10 @@
 import React, { useEffect } from "react";
 import CreateCategory from "./CreateCategory";
 import CategoriesTable from "./CategoriesTable";
-// import { useDispatch, useSelector } from "react-redux";
-// import { listCategory } from "../../Redux/Actions/CategoryActions";
-// import {
-//   CATEGORY_CREATE_RESET,
-//   CATEGORY_CREATE_SUCCESS,
-// } from "../../Redux/Constants/CategoryConstants";
 
 const MainCategories = () => {
-  // const dispatch = useDispatch();
-
-  // const categoriesList = useSelector((state) => state.categorylist);
-  // const { categories, loading } = categoriesList;
-
-  // useEffect(() => {
-  //   dispatch(listCategory());
-  // }, [dispatch]);
-
+  const [editID, setEditID] = React.useState("");
+  console.log(editID);
   return (
     <section className="content-main">
       <div className="content-header">
@@ -32,10 +19,9 @@ const MainCategories = () => {
       <div className="card shadow-sm">
         <div className="card-body">
           <div className="row">
-            {/* Create category */}
-            <CreateCategory />
-            {/* Categories table */}
-            {/* <CategoriesTable categories={categories} /> */}
+            <CreateCategory editID={editID} setEditID={setEditID} />
+
+            <CategoriesTable setEditID={setEditID} />
           </div>
           {/* <h1 className="text-danger">{loading}</h1> */}
         </div>

@@ -84,6 +84,8 @@ export const listCategories = /* GraphQL */ `
       items {
         id
         categoryName
+        description
+        imgUrl
         createdAt
         updatedAt
         __typename

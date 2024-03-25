@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Amplify } from "aws-amplify";
+import amplifyconfig from "@/aws-exports";
+import { generateClient } from "aws-amplify/api";
+import { createCategories, updateCategories } from "@/graphql/mutations";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getCategoria, newCategory } from "@/utils/graphqlFunctions";
 // import { createCategory } from "../../Redux/Actions/CategoryActions";
 // import { useDispatch, useSelector } from "react-redux";
 // import { CATEGORY_CREATE_RESET } from "../../Redux/Constants/CategoryConstants";
@@ -6,21 +12,97 @@ import React, { useEffect, useState } from "react";
 // import Loading from "../LoadingError/Loading";
 // import { listCategory } from "../../Redux/Actions/CategoryActions";
 
-const ToastObjects = {
-  pauseOnFocusLoss: false,
-  draggable: false,
-  pauseOnHover: false,
-  autoClose: 2000,
-};
+// const ToastObjects = {
+//   pauseOnFocusLoss: false,
+//   draggable: false,
+//   pauseOnHover: false,
+//   autoClose: 2000,
+// };
 
-const CreateCategory = () => {
+const CreateCategory = ({ editID, setEditID }) => {
   // const dispatch = useDispatch();
+  Amplify.configure(amplifyconfig);
   const [categoryName, setCategoryName] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState(null);
 
-  const submitHandler = (e) => {
+  useEffect(() => {
+    console.log(file);
+  }, [setFile, file]);
+
+  const client = generateClient();
+
+  const queryClient = useQueryClient();
+  // useEffect(() => {
+  //   if (editID) {
+  //     // Si hay un editID, obtenemos los datos de la categoría y actualizamos el estado interno
+  //     const fetchData = async () => {
+  //       const data = await getCategoria(editID);
+  //       setCategoryName(data.categoryName);
+  //       setDescription(data.description);
+  //     };
+  //     fetchData();
+  //     setEditID("");
+  //   }
+  // }, [editID]);
+
+  // New category React Query
+  const {
+    mutate,
+    data: dataMutation,
+    status: statusMutation,
+  } = useMutation(newCategory, {
+    onSuccess: () => {
+      // router.push("/productos");
+
+      queryClient.invalidateQueries("AllCategories");
+    },
+  });
+
+  const { data, status, error } = useQuery(
+    [`GetCategory-${editID}`],
+    () => getCategoria(editID),
+    {
+      enabled: !!editID,
+      onSuccess: (data) => {
+        console.log(data);
+        setCategoryName(data.categoryName);
+        setDescription(data.description);
+        // setEditID("");
+      },
+    }
+  );
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(createCategory(categoryName, descripcion));
+
+    let responseImageUrl;
+    let imagePublicId;
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      // console.log("esta es la data public_id", data.data.secure_url);
+      // console.log("esta es la data public_id", data);
+      responseImageUrl = data.data.secure_url;
+      imagePublicId = data.data.public_id;
+      if (data) {
+        mutate({
+          categoryName,
+          imgUrl: data.data.secure_url,
+          description,
+        });
+      } else {
+        console.log("no existe data");
+      }
+    }
+
+    setDescription(""), setCategoryName("");
   };
 
   const handleCategoryNameChange = (e) => {
@@ -28,7 +110,7 @@ const CreateCategory = () => {
   };
 
   const handleDescripcionChange = (e) => {
-    setDescripcion(e.target.value);
+    setDescription(e.target.value);
   };
 
   // const categoryCreate = useSelector((state) => state.categoryCreate);
@@ -44,9 +126,55 @@ const CreateCategory = () => {
   //   }
   // }, [categoryCreate.success, dispatch]);
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      // console.log("esta es la data public_id", data.data.secure_url);
+      // console.log("esta es la data public_id", data);
+      responseImageUrl = data.data.secure_url;
+      imagePublicId = data.data.public_id;
+      if (data) {
+        try {
+          const result = await client.graphql({
+            query: updateCategories,
+            variables: {
+              input: {
+                id: editID,
+                categoryName,
+                imgUrl: data.data.secure_url,
+                description,
+              },
+            },
+          });
+          console.log(result);
+          // setName(""), setPrice(""), console.log(res);
+          router.push("/productos");
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log("no existe data");
+      }
+    }
+
+    queryClient.invalidateQueries("AllCategories");
+    setCategoryName("");
+    setDescription(" ");
+    setEditID("");
+  };
+
   return (
     <div className="col-md-12 col-lg-4">
-      <form onSubmit={submitHandler}>
+      <form onSubmit={editID ? handleUpdate : submitHandler}>
         <div className="mb-4">
           <label htmlFor="product_name" className="form-label">
             Name
@@ -61,18 +189,24 @@ const CreateCategory = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="form-label">Images</label>
-          <input className="form-control" type="file" />
-        </div>
-        <div className="mb-4">
           <label className="form-label">Description</label>
           <textarea
             placeholder="Type here"
             className="form-control"
             rows="4"
-            value={descripcion}
+            value={description}
             onChange={handleDescripcionChange}
           ></textarea>
+        </div>
+        <div className="mb-4">
+          <input
+            className=" bg-amber-300 rounded-md"
+            multiple
+            type="file"
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+            }}
+          />
         </div>
 
         <div className="d-grid">

@@ -3,6 +3,7 @@ import "./globals.css";
 import ReactQueryProvider from "./components/providers/ReactQueryProvider";
 import Sidebar from "./components/Sidebar";
 import Product from "./components/Product";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

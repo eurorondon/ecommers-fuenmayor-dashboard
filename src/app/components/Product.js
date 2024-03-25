@@ -5,7 +5,7 @@ import Link from "next/link";
 const Product = (props) => {
   const { product, handleDelete } = props;
 
-  // console.log(product.photo[0].publicId);
+  console.log(product);
 
   return (
     <>

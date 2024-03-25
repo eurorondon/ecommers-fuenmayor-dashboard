@@ -8,7 +8,11 @@ import { getProduct } from "@/graphql/queries";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
-import { newProduct, productDetails } from "@/utils/graphqlFunctions";
+import {
+  getCategories,
+  newProduct,
+  productDetails,
+} from "@/utils/graphqlFunctions";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -17,6 +21,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
+  const [categoryList, setCategoryList] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
@@ -25,8 +30,6 @@ function UpdateProduct({ hasEdit, productId }) {
 
   // console.log("product id  desde update", productId);
 
-  console.log(description);
-
   const { data, status, error } = useQuery(
     ["GetProduct", productId],
     () => productDetails(productId),
@@ -34,6 +37,8 @@ function UpdateProduct({ hasEdit, productId }) {
       enabled: !!productId,
       onSuccess: (data) => {
         setName(data.name);
+        // setCategoryList(data?.categories[0]);
+        setCategory(data.categories ? data?.categories[0] : "");
         setPrice(data.price);
         setDescription(data.description);
         setImage(data.photo[0].url);
@@ -52,6 +57,8 @@ function UpdateProduct({ hasEdit, productId }) {
     },
   });
 
+  const { data: dataCategories } = useQuery("AllCategories", getCategories);
+
   const handleSubmit = async () => {
     let responseImageUrl;
     let imagePublicId;
@@ -69,12 +76,10 @@ function UpdateProduct({ hasEdit, productId }) {
       imagePublicId = data.data.public_id;
     }
 
-    console.log(description);
-
     mutate({
       name,
       price,
-      categories: category,
+      categories: [category, categoryList],
       responseImageUrl,
       imagePublicId,
       description: description,
@@ -83,13 +88,13 @@ function UpdateProduct({ hasEdit, productId }) {
 
   const handleUpdate = async () => {
     try {
-      console.log(countInStock);
       const result = await client.graphql({
         query: updateProduct,
         variables: {
           input: {
             id: productId,
             name,
+            categories: category,
             price,
             description,
             countInStock,
@@ -105,14 +110,14 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   return (
-    <div className=" flex-row h-screen flex justify-center items-center bg-slate-700">
+    <div className=" flex-row h-screen flex justify-center items-center mt-52">
       <div className="">
-        <div className="card mb-4 shadow-sm">
+        <div className="card  ">
           <div className="card-body">
-            <div className="mb-4">
+            <div className="">
               <label
                 htmlFor="product_title"
-                className="block text-stone-50  text-sm font-bold mb-2"
+                className="block   text-sm font-bold mt-2"
               >
                 Titulo de Producto
               </label>
@@ -129,7 +134,7 @@ function UpdateProduct({ hasEdit, productId }) {
             <div className="mb-4">
               <label
                 htmlFor="product_title"
-                className="block text-stone-50 text-sm font-bold mb-2"
+                className="block   text-sm font-bold mt-2 "
               >
                 Categoria
               </label>
@@ -139,20 +144,25 @@ function UpdateProduct({ hasEdit, productId }) {
                   // value={selectedCategory}
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  <option value="">Seleccione una categoría</option>
-                  {/* {categoriesList.categories.map((category) => (
-                  <option key={category._id} value={category.categoria}>
-                    {category.categoria}
-                  </option>
-                ))} */}
+                  {category ? (
+                    <option value={category}>{category}</option>
+                  ) : (
+                    <option value="">Seleccione una categoría</option>
+                  )}
+
+                  {dataCategories?.map((category) => (
+                    <option key={category.id} value={category.categoryName}>
+                      {category.categoryName}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="product_title"
-                className="block text-stone-50 text-sm font-bold mb-2 "
+                className="block   text-sm font-bold mt-2 "
               >
                 Categoria 2
               </label>
@@ -165,11 +175,11 @@ function UpdateProduct({ hasEdit, productId }) {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               />
-            </div>
-            <div className="mb-4">
+            </div> */}
+            {/* <div className="mb-4">
               <label
                 htmlFor="product_title"
-                className="block text-sm text-slate-50 font-bold mb-2"
+                className="block   text-sm font-bold mt-2"
               >
                 Categoria 3
               </label>
@@ -182,11 +192,11 @@ function UpdateProduct({ hasEdit, productId }) {
                 // value={category3}
                 onChange={(e) => setCategory3(e.target.value)}
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label
                 htmlFor="product_price"
-                className="block text-slate-50 font-bold mb-2"
+                className="block   text-sm font-bold mt-2"
               >
                 Precio
               </label>
@@ -203,7 +213,7 @@ function UpdateProduct({ hasEdit, productId }) {
             <div className="mb-4">
               <label
                 htmlFor="product_price"
-                className="block text-slate-50 font-bold mb-2"
+                className="block   text-sm font-bold mt-2"
               >
                 Cantidad en Stock
               </label>
@@ -218,13 +228,13 @@ function UpdateProduct({ hasEdit, productId }) {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-slate-50 font-bold mb-2">
+              <label className="block   text-sm font-bold mt-2">
                 Descripcion
               </label>
               <textarea
                 placeholder="Escribir aqui"
                 className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-                rows="7"
+                rows="2"
                 // required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
