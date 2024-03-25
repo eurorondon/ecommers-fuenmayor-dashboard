@@ -1,43 +1,45 @@
 "use client";
-import { Amplify } from "aws-amplify";
-import { generateClient } from "aws-amplify/api";
-import amplifyconfig from "@/aws-exports";
-import { useEffect, useState } from "react";
-import Product from "../components/Product";
-import { deleteProduct } from "@/graphql/mutations";
-import { getProducts } from "@/utils/graphqlFunctions";
-import { useQuery } from "react-query";
 
-Amplify.configure(amplifyconfig);
-const client = generateClient();
+import Product from "../components/Product";
+import { deleteProductFunction, getProducts } from "@/utils/graphqlFunctions";
+import { useQueryClient, useMutation, useQuery } from "react-query";
 
 function Productos() {
-  const [productos, setProductos] = useState(null);
-  const { data } = useQuery("test", getProducts);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (data) {
-      setProductos(data);
+  //GET ALL PRODUCST WITH REACT QUERY
+  const { data: productos } = useQuery("AllProducts", getProducts);
+
+  //DELETE PRODUCT WITH REACT QUERY
+  const { mutate } = useMutation(deleteProductFunction, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("AllProducts");
+    },
+  });
+
+  const handleDeleteImage = async (publicId) => {
+    try {
+      const response = await fetch(`/api/upload?publicId=${publicId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error("Error de red al eliminar la imagen desde page", error);
     }
-  }, [data]);
+  };
 
-  console.log(productos);
-
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, publicId) => {
+    console.log(id, publicId);
     const userConfirmed = window.confirm("Do you want to delete?");
     if (userConfirmed) {
       try {
-        const res = await client.graphql({
-          query: deleteProduct,
-          variables: { input: { id } },
-        });
-        console.log(res);
-        setProductos((prevList) =>
-          prevList.filter((product) => product.id !== id)
-        );
+        mutate(id);
       } catch (error) {
         console.log(error);
       }
+      handleDeleteImage(publicId);
     }
   };
 
@@ -46,10 +48,7 @@ function Productos() {
       {productos &&
         productos.map((product) => (
           <div className="" key={product.id}>
-            <Product
-              product={product}
-              handleDelete={() => handleDelete(product.id)}
-            />
+            <Product product={product} handleDelete={handleDelete} />
           </div>
         ))}
     </div>

@@ -5,14 +5,7 @@ import Link from "next/link";
 const Product = (props) => {
   const { product, handleDelete } = props;
 
-  // const dispatch = useDispatch();
-
-  // const deletehandler = (id) => {
-  //   if (window.confirm("Are you sure??")) {
-  //     dispatch(deleteProduct(id));
-  //   }
-  // };
-  // console.log(product.phohref[0].url);
+  // console.log(product.photo[0].publicId);
 
   return (
     <>
@@ -60,9 +53,7 @@ const Product = (props) => {
               </Link>
               <button
                 onClick={() =>
-                  handleDelete
-                    ? handleDelete(product?.id)
-                    : console.log("no existe handleDelete")
+                  handleDelete(product.id, product.photo[0].publicId)
                 }
                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 p-2 pb-3 col-span-6 md:col-span-3"
               >

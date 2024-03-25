@@ -63,3 +63,33 @@ export const listProducts = /* GraphQL */ `
     }
   }
 `;
+export const getCategories = /* GraphQL */ `
+  query GetCategories($id: ID!) {
+    getCategories(id: $id) {
+      id
+      categoryName
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listCategories = /* GraphQL */ `
+  query ListCategories(
+    $filter: ModelCategoriesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        categoryName
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

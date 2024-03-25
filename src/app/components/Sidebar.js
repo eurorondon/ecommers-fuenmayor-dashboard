@@ -66,7 +66,7 @@ const Sidebar = () => {
                 className={
                   pathname === "/categorias" ? "active menu-link" : "menu-link"
                 }
-                href={"/"}
+                href={"/categories"}
               >
                 <i className="icon fas fa-list"></i>
                 <span className="text">Categories</span>

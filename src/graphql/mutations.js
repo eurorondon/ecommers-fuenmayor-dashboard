@@ -106,3 +106,45 @@ export const deleteProduct = /* GraphQL */ `
     }
   }
 `;
+export const createCategories = /* GraphQL */ `
+  mutation CreateCategories(
+    $input: CreateCategoriesInput!
+    $condition: ModelCategoriesConditionInput
+  ) {
+    createCategories(input: $input, condition: $condition) {
+      id
+      categoryName
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateCategories = /* GraphQL */ `
+  mutation UpdateCategories(
+    $input: UpdateCategoriesInput!
+    $condition: ModelCategoriesConditionInput
+  ) {
+    updateCategories(input: $input, condition: $condition) {
+      id
+      categoryName
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteCategories = /* GraphQL */ `
+  mutation DeleteCategories(
+    $input: DeleteCategoriesInput!
+    $condition: ModelCategoriesConditionInput
+  ) {
+    deleteCategories(input: $input, condition: $condition) {
+      id
+      categoryName
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

@@ -7,6 +7,8 @@ import { createProduct, updateProduct } from "@/graphql/mutations";
 import { getProduct } from "@/graphql/queries";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "react-query";
+import { newProduct, productDetails } from "@/utils/graphqlFunctions";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -15,49 +17,44 @@ function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
+  const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [image, setImage] = useState("");
-  const [product, setProduct] = useState({});
 
-  console.log("product id  desde update", productId);
+  // console.log("product id  desde update", productId);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!productId) {
-          console.log("productId es null, no se realiza la consulta");
-          return;
-        }
+  console.log(description);
 
-        const data = await client.graphql({
-          query: getProduct,
-          variables: {
-            id: productId,
-          },
-        });
-
-        console.log("este es el resultado de un producto");
-
-        setName(data.data.getProduct.name);
-        setPrice(data.data.getProduct.price);
-        setImage(data.data.getProduct.photo[0].url);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData(); // Llama a la función fetchData dentro del useEffect
-  }, [hasEdit, productId]);
-
-  console.log(productId);
-
-  console.log(product);
-  console.log(hasEdit);
+  const { data, status, error } = useQuery(
+    ["GetProduct", productId],
+    () => productDetails(productId),
+    {
+      enabled: !!productId,
+      onSuccess: (data) => {
+        setName(data.name);
+        setPrice(data.price);
+        setDescription(data.description);
+        setImage(data.photo[0].url);
+        setCountInStock(data.countInStock);
+      },
+    }
+  );
+  // New Product React Query
+  const {
+    mutate,
+    data: dataMutation,
+    status: statusMutation,
+  } = useMutation(newProduct, {
+    onSuccess: () => {
+      setName(""), setPrice(""), router.push("/productos");
+    },
+  });
 
   const handleSubmit = async () => {
     let responseImageUrl;
+    let imagePublicId;
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
@@ -67,32 +64,26 @@ function UpdateProduct({ hasEdit, productId }) {
         body: formData,
       });
       const data = await response.json();
-      responseImageUrl = data.url;
+      console.log("esta es la data public_id", data.data.public_id);
+      responseImageUrl = data.data.url;
+      imagePublicId = data.data.public_id;
     }
 
-    try {
-      const res = await client.graphql({
-        query: createProduct,
-        variables: {
-          input: {
-            name,
-            price,
-            photo: {
-              url: responseImageUrl,
-            },
-          },
-        },
-      });
-      setName(""), setPrice(""), console.log(res);
-      router.push("/productos");
-    } catch (error) {
-      console.log(error.errors[0].message);
-      alert(error.errors[0].message);
-    }
+    console.log(description);
+
+    mutate({
+      name,
+      price,
+      categories: category,
+      responseImageUrl,
+      imagePublicId,
+      description: description,
+    });
   };
 
   const handleUpdate = async () => {
     try {
+      console.log(countInStock);
       const result = await client.graphql({
         query: updateProduct,
         variables: {
@@ -100,6 +91,8 @@ function UpdateProduct({ hasEdit, productId }) {
             id: productId,
             name,
             price,
+            description,
+            countInStock,
           },
         },
       });
@@ -169,8 +162,8 @@ function UpdateProduct({ hasEdit, productId }) {
                 className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
                 id="product_title"
                 // required
-                // value={category2}
-                onChange={(e) => setCategory2(e.target.value)}
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               />
             </div>
             <div className="mb-4">
