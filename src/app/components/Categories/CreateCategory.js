@@ -4,7 +4,11 @@ import amplifyconfig from "@/aws-exports";
 import { generateClient } from "aws-amplify/api";
 import { createCategories, updateCategories } from "@/graphql/mutations";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getCategoria, newCategory } from "@/utils/graphqlFunctions";
+import {
+  getCategoria,
+  getCategories,
+  newCategory,
+} from "@/utils/graphqlFunctions";
 // import { createCategory } from "../../Redux/Actions/CategoryActions";
 // import { useDispatch, useSelector } from "react-redux";
 // import { CATEGORY_CREATE_RESET } from "../../Redux/Constants/CategoryConstants";
@@ -25,6 +29,21 @@ const CreateCategory = ({ editID, setEditID }) => {
   const [categoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
+  const [editItem, setEditItem] = useState("");
+  const inputFileRef = React.useRef(null);
+
+  const { data } = useQuery("AllCategories", getCategories);
+
+  React.useEffect(() => {
+    if (data) {
+      const resFilter = data?.filter((item) => item.id === editID);
+
+      setEditItem(resFilter[0]);
+    }
+  }, [editID, data]);
+  if (editItem) {
+    console.log(editItem);
+  }
 
   useEffect(() => {
     console.log(file);
@@ -33,18 +52,12 @@ const CreateCategory = ({ editID, setEditID }) => {
   const client = generateClient();
 
   const queryClient = useQueryClient();
-  // useEffect(() => {
-  //   if (editID) {
-  //     // Si hay un editID, obtenemos los datos de la categoría y actualizamos el estado interno
-  //     const fetchData = async () => {
-  //       const data = await getCategoria(editID);
-  //       setCategoryName(data.categoryName);
-  //       setDescription(data.description);
-  //     };
-  //     fetchData();
-  //     setEditID("");
-  //   }
-  // }, [editID]);
+  React.useEffect(() => {
+    if (editItem) {
+      setCategoryName(editItem.categoryName);
+      setDescription(editItem.description);
+    }
+  }, [editItem]);
 
   // New category React Query
   const {
@@ -59,19 +72,19 @@ const CreateCategory = ({ editID, setEditID }) => {
     },
   });
 
-  const { data, status, error } = useQuery(
-    [`GetCategory-${editID}`],
-    () => getCategoria(editID),
-    {
-      enabled: !!editID,
-      onSuccess: (data) => {
-        console.log(data);
-        setCategoryName(data.categoryName);
-        setDescription(data.description);
-        // setEditID("");
-      },
-    }
-  );
+  // const { data, status, error } = useQuery(
+  //   [`GetCategory-${editID}`],
+  //   () => getCategoria(editID),
+  //   {
+  //     enabled: !!editID,
+  //     onSuccess: (data) => {
+  //       console.log(data);
+  //       setCategoryName(data.categoryName);
+  //       setDescription(data.description);
+  //       // setEditID("");
+  //     },
+  //   }
+  // );
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -101,6 +114,8 @@ const CreateCategory = ({ editID, setEditID }) => {
         console.log("no existe data");
       }
     }
+    setFile(null);
+    inputFileRef.current.value = "";
 
     setDescription(""), setCategoryName("");
   };
@@ -138,17 +153,14 @@ const CreateCategory = ({ editID, setEditID }) => {
         body: formData,
       });
       const data = await response.json();
-      // console.log("esta es la data public_id", data.data.secure_url);
-      // console.log("esta es la data public_id", data);
-      responseImageUrl = data.data.secure_url;
-      imagePublicId = data.data.public_id;
+
       if (data) {
         try {
           const result = await client.graphql({
             query: updateCategories,
             variables: {
               input: {
-                id: editID,
+                id: editItem.id,
                 categoryName,
                 imgUrl: data.data.secure_url,
                 description,
@@ -156,20 +168,33 @@ const CreateCategory = ({ editID, setEditID }) => {
             },
           });
           console.log(result);
+
           // setName(""), setPrice(""), console.log(res);
           router.push("/productos");
         } catch (error) {
           console.log(error);
         }
-      } else {
-        console.log("no existe data");
       }
     }
+
+    const result = await client.graphql({
+      query: updateCategories,
+      variables: {
+        input: {
+          id: editID,
+          categoryName,
+          description,
+        },
+      },
+    });
+    console.log(result);
 
     queryClient.invalidateQueries("AllCategories");
     setCategoryName("");
     setDescription(" ");
     setEditID("");
+    setFile(null);
+    inputFileRef.current.value = "";
   };
 
   return (
@@ -200,6 +225,7 @@ const CreateCategory = ({ editID, setEditID }) => {
         </div>
         <div className="mb-4">
           <input
+            ref={inputFileRef}
             className=" bg-amber-300 rounded-md"
             multiple
             type="file"
@@ -210,7 +236,20 @@ const CreateCategory = ({ editID, setEditID }) => {
         </div>
 
         <div className="d-grid">
-          <button className="btn btn-primary py-3 ">Create category</button>
+          <button className="btn btn-primary py-3 ">
+            {editItem ? "Update category" : "Create Category"}
+          </button>
+          {editItem && (
+            <div className="mt-3 text-primary" style={{ textAlign: "center" }}>
+              <button
+                onClick={() => {
+                  setEditID(null);
+                }}
+              >
+                New Category
+              </button>
+            </div>
+          )}
         </div>
       </form>
     </div>

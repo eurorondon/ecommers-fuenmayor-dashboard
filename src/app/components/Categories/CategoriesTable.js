@@ -35,8 +35,6 @@ const CategoriesTable = ({ setEditID }) => {
     // queryClient.invalidateQueries("GetCategory");
   };
 
-  console.log(data);
-
   return (
     <div className="col-md-12 col-lg-8 " style={{ color: "black" }}>
       <table className="table ">

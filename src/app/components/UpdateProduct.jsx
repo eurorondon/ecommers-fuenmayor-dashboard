@@ -110,7 +110,7 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   return (
-    <div className=" flex-row h-screen flex justify-center items-center mt-52">
+    <div className=" flex-row h-screen flex justify-center items-center ">
       <div className="">
         <div className="card  ">
           <div className="card-body">
