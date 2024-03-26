@@ -13,6 +13,7 @@ import {
   newProduct,
   productDetails,
 } from "@/utils/graphqlFunctions";
+import Switch from "./Switch";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -27,6 +28,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [image, setImage] = useState("");
+  const [toggle, setToggle] = useState(false);
 
   // console.log("product id  desde update", productId);
 
@@ -209,6 +211,59 @@ function UpdateProduct({ hasEdit, productId }) {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
+            </div>
+            <div className="mb-4 ">
+              <div className="flex items-center  gap-3">
+                <Switch toggle={toggle} setToggle={setToggle} />
+                <label
+                  htmlFor="product_price"
+                  className="block   text-sm font-bold "
+                >
+                  En oferta
+                </label>
+              </div>
+              {toggle && (
+                <div className="flex gap-4">
+                  <div className="form-check"></div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="percentage"
+                      id="10%"
+                      value="10%"
+                      defaultChecked
+                    />
+                    <label className="form-check-label" htmlFor="10%">
+                      10%
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="percentage"
+                      id="20%"
+                      value="20%"
+                    />
+                    <label className="form-check-label" htmlFor="20%">
+                      20%
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="percentage"
+                      id="50%"
+                      value="50%"
+                    />
+                    <label className="form-check-label" htmlFor="50%">
+                      50%
+                    </label>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="mb-4">
               <label
