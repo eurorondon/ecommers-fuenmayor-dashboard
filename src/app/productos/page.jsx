@@ -10,8 +10,6 @@ function Productos() {
   //GET ALL PRODUCST WITH REACT QUERY
   const { data: productos } = useQuery("AllProducts", getProducts);
 
-  console.log(productos);
-
   //DELETE PRODUCT WITH REACT QUERY
   const { mutate } = useMutation(deleteProductFunction, {
     onSuccess: () => {
@@ -19,29 +17,42 @@ function Productos() {
     },
   });
 
-  const handleDeleteImage = async (publicId) => {
-    try {
-      const response = await fetch(`/api/upload?publicId=${publicId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {
-      console.error("Error de red al eliminar la imagen desde page", error);
-    }
-  };
+  // const handleDelete = async (id, publicId) => {
+  //   try {
+  //     const response = await fetch(`/api/delete`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ publicId: publicId }),
+  //     });
+  //     // console.log(response);
+  //   } catch (error) {
+  //     console.error("Error de red al eliminar la imagen desde page", error);
+  //   }
+  // };
 
   const handleDelete = async (id, publicId) => {
     console.log(id, publicId);
     const userConfirmed = window.confirm("Do you want to delete?");
     if (userConfirmed) {
       try {
+        const response = await fetch(`/api/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ publicId: publicId }),
+        });
+        // console.log(response);
+      } catch (error) {
+        console.error("Error de red al eliminar la imagen desde page", error);
+      }
+      try {
         mutate(id);
       } catch (error) {
         console.log(error);
       }
-      handleDeleteImage(publicId);
     }
   };
 

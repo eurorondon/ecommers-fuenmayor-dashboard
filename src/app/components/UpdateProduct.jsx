@@ -30,6 +30,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [image, setImage] = useState("");
+  const [publicIdCloudinary, setPublicIdCloudinary] = useState(null);
   const [toggle, setToggle] = useState(false);
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [bestSellers, setBestSellers] = useState(false);
@@ -42,12 +43,14 @@ function UpdateProduct({ hasEdit, productId }) {
     {
       enabled: !!productId,
       onSuccess: (data) => {
+        console.log(data);
         setName(data.name);
         // setCategoryList(data?.categories[0]);
         setCategory(data.categories ? data?.categories[0] : "");
         setPrice(data.price);
         setDescription(data.description);
         setImage(data.photo[0].url);
+        setPublicIdCloudinary(data.photo[0].publicId);
         setCountInStock(data.countInStock);
         setToggle(data.inOffer);
         setDiscountPercentage(data.discountPercentage);
@@ -135,11 +138,23 @@ function UpdateProduct({ hasEdit, productId }) {
             },
           },
         });
-        console.log(result);
-        // setName(""), setPrice(""), console.log(res);
+
+        // setName(""), setPrice(""),
         router.push("/productos");
       } catch (error) {
         console.log(error);
+      }
+      try {
+        const response = await fetch(`/api/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ publicId: publicIdCloudinary }),
+        });
+        // console.log(response);
+      } catch (error) {
+        console.error("Error de red al eliminar la imagen desde page", error);
       }
     }
     try {
@@ -159,7 +174,7 @@ function UpdateProduct({ hasEdit, productId }) {
           },
         },
       });
-      console.log(result);
+
       // setName(""), setPrice(""), console.log(res);
       router.push("/productos");
     } catch (error) {
@@ -168,7 +183,7 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   useEffect(() => {
-    console.log(discountPercentage);
+    // console.log(discountPercentage);
   }, [discountPercentage]);
 
   const handleDiscountChange = (value) => {

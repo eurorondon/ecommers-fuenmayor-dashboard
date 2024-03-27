@@ -36,22 +36,3 @@ export async function POST(request) {
     data: response,
   });
 }
-
-export async function DELETE(request) {
-  console.log(request.query);
-  // try {
-  //   const response = await cloudinary.uploader.destroy(publicId);
-
-  //   console.log(response);
-  //   NextResponse.json("Elimiando");
-  // } catch (error) {
-  return NextResponse.json(
-    {
-      message: "Error al eliminar la imagen",
-    },
-    {
-      status: 500,
-    }
-  );
-  // }
-}
