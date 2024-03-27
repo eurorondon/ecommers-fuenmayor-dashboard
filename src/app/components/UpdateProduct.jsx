@@ -103,6 +103,21 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   const handleUpdate = async () => {
+    let responseImageUrl;
+    let imagePublicId;
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      console.log("esta es la data public_id", data.data.public_id);
+      responseImageUrl = data.data.url;
+      imagePublicId = data.data.public_id;
+    }
     try {
       const result = await client.graphql({
         query: updateProduct,
@@ -117,6 +132,10 @@ function UpdateProduct({ hasEdit, productId }) {
             inOffer: toggle,
             discountPercentage,
             bestSellers,
+            photo: {
+              url: responseImageUrl,
+              publicId: imagePublicId,
+            },
           },
         },
       });
