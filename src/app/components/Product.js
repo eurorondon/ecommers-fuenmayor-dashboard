@@ -5,8 +5,6 @@ import Link from "next/link";
 const Product = (props) => {
   const { product, handleDelete } = props;
 
-  console.log(product);
-
   return (
     <>
       <div className=" flex flex-col justify-center items-center">

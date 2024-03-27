@@ -34,8 +34,6 @@ function UpdateProduct({ hasEdit, productId }) {
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [bestSellers, setBestSellers] = useState(false);
 
-  console.log("sellers is :", bestSellers);
-
   // console.log("product id  desde update", productId);
 
   const { data, status, error } = useQuery(
@@ -58,7 +56,6 @@ function UpdateProduct({ hasEdit, productId }) {
     }
   );
 
-  console.log("el porcentaje del producto es :", discountPercentage);
   // New Product React Query
   const {
     mutate,
@@ -117,6 +114,33 @@ function UpdateProduct({ hasEdit, productId }) {
       console.log("esta es la data public_id", data.data.public_id);
       responseImageUrl = data.data.url;
       imagePublicId = data.data.public_id;
+      try {
+        const result = await client.graphql({
+          query: updateProduct,
+          variables: {
+            input: {
+              id: productId,
+              name,
+              categories: category,
+              price,
+              description,
+              countInStock,
+              inOffer: toggle,
+              discountPercentage,
+              bestSellers,
+              photo: {
+                url: responseImageUrl,
+                publicId: imagePublicId,
+              },
+            },
+          },
+        });
+        console.log(result);
+        // setName(""), setPrice(""), console.log(res);
+        router.push("/productos");
+      } catch (error) {
+        console.log(error);
+      }
     }
     try {
       const result = await client.graphql({
@@ -132,10 +156,6 @@ function UpdateProduct({ hasEdit, productId }) {
             inOffer: toggle,
             discountPercentage,
             bestSellers,
-            photo: {
-              url: responseImageUrl,
-              publicId: imagePublicId,
-            },
           },
         },
       });
