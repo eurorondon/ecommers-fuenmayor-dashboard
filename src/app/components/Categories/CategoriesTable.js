@@ -7,14 +7,14 @@ import { FaEdit } from "react-icons/fa";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteCategory, getCategories } from "@/utils/graphqlFunctions";
+import { deleteCategory, getAllCategories } from "@/utils/graphqlFunctions";
 import Link from "next/link";
 import Image from "next/image";
 
 Amplify.configure(amplifyconfig);
 
 const CategoriesTable = ({ setEditID }) => {
-  const { data } = useQuery("AllCategories", getCategories);
+  const { data } = useQuery("AllCategories", getAllCategories);
   const queryClient = useQueryClient();
 
   //DELETE PRODUCT WITH REACT QUERY

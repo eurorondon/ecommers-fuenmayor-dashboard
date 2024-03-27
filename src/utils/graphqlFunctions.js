@@ -5,7 +5,7 @@ import {
   listProducts,
   getProduct,
   listCategories,
-  getCategory,
+  getCategories,
 } from "@/graphql/queries";
 import {
   createCategories,
@@ -24,8 +24,10 @@ export async function newProduct({
   categories,
   responseImageUrl,
   imagePublicId,
+  inOffer,
+  discountPercentage,
+  bestSellers,
 }) {
-  console.log(imagePublicId);
   // if (typeof price !== "number" || isNaN(price)) {
   //   console.error('Error: El valor de "price" no es un número válido.');
   //   throw new Error('Error: El valor de "price" no es un número válido.');
@@ -42,6 +44,9 @@ export async function newProduct({
           url: responseImageUrl,
           publicId: imagePublicId,
         },
+        inOffer,
+        discountPercentage,
+        bestSellers,
       },
     },
   });
@@ -94,7 +99,7 @@ export async function newCategory({ categoryName, description, imgUrl }) {
   return res;
 }
 
-export async function getCategories() {
+export async function getAllCategories() {
   const res = await client.graphql({
     query: listCategories,
     variables: {},
@@ -114,7 +119,7 @@ export async function deleteCategory(id) {
 export async function getCategoria(id) {
   console.log(id);
   const res = await client.graphql({
-    query: getCategory,
+    query: getCategories,
     variables: { id },
   });
 

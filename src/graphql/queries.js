@@ -28,6 +28,9 @@ export const getProduct = /* GraphQL */ `
       countInStock
       createdAt
       updatedAt
+      inOffer
+      discountPercentage
+      bestSellers
       id
       __typename
     }
@@ -51,6 +54,9 @@ export const listProducts = /* GraphQL */ `
         countInStock
         createdAt
         updatedAt
+        inOffer
+        discountPercentage
+        bestSellers
         id
         __typename
         photo {
@@ -68,6 +74,8 @@ export const getCategories = /* GraphQL */ `
     getCategories(id: $id) {
       id
       categoryName
+      description
+      imgUrl
       createdAt
       updatedAt
       __typename

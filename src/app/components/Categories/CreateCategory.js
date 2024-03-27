@@ -6,7 +6,7 @@ import { createCategories, updateCategories } from "@/graphql/mutations";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   getCategoria,
-  getCategories,
+  getAllCategories,
   newCategory,
 } from "@/utils/graphqlFunctions";
 // import { createCategory } from "../../Redux/Actions/CategoryActions";
@@ -32,7 +32,7 @@ const CreateCategory = ({ editID, setEditID }) => {
   const [editItem, setEditItem] = useState("");
   const inputFileRef = React.useRef(null);
 
-  const { data } = useQuery("AllCategories", getCategories);
+  const { data } = useQuery("AllCategories", getAllCategories);
 
   React.useEffect(() => {
     if (data) {

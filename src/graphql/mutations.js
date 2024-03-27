@@ -31,6 +31,9 @@ export const createProduct = /* GraphQL */ `
       countInStock
       createdAt
       updatedAt
+      inOffer
+      discountPercentage
+      bestSellers
       id
       __typename
     }
@@ -66,6 +69,9 @@ export const updateProduct = /* GraphQL */ `
       countInStock
       createdAt
       updatedAt
+      inOffer
+      discountPercentage
+      bestSellers
       id
       __typename
     }
@@ -101,6 +107,9 @@ export const deleteProduct = /* GraphQL */ `
       countInStock
       createdAt
       updatedAt
+      inOffer
+      discountPercentage
+      bestSellers
       id
       __typename
     }
@@ -118,28 +127,6 @@ export const createCategories = /* GraphQL */ `
       imgUrl
       createdAt
       updatedAt
-      __typename
-    }
-  }
-`;
-
-export const listCategories = /* GraphQL */ `
-  query ListCategories(
-    $filter: ModelCategoriesFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCategories(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        categoryName
-        description
-        imgUrl
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
       __typename
     }
   }

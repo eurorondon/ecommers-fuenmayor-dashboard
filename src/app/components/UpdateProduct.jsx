@@ -9,11 +9,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
 import {
-  getCategories,
+  getAllCategories,
   newProduct,
   productDetails,
 } from "@/utils/graphqlFunctions";
-import Switch from "./Switch";
+import SwitchOfert from "./SwitchOffer";
+import SwitchOffer from "./SwitchOffer";
+import SwitchSellers from "./SwitchOffer";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -29,6 +31,10 @@ function UpdateProduct({ hasEdit, productId }) {
   const [file, setFile] = useState(null);
   const [image, setImage] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [discountPercentage, setDiscountPercentage] = useState(10);
+  const [bestSellers, setBestSellers] = useState(false);
+
+  console.log("sellers is :", bestSellers);
 
   // console.log("product id  desde update", productId);
 
@@ -45,9 +51,14 @@ function UpdateProduct({ hasEdit, productId }) {
         setDescription(data.description);
         setImage(data.photo[0].url);
         setCountInStock(data.countInStock);
+        setToggle(data.inOffer);
+        setDiscountPercentage(data.discountPercentage);
+        setBestSellers(data.bestSellers);
       },
     }
   );
+
+  console.log("el porcentaje del producto es :", discountPercentage);
   // New Product React Query
   const {
     mutate,
@@ -59,7 +70,7 @@ function UpdateProduct({ hasEdit, productId }) {
     },
   });
 
-  const { data: dataCategories } = useQuery("AllCategories", getCategories);
+  const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
   const handleSubmit = async () => {
     let responseImageUrl;
@@ -85,6 +96,9 @@ function UpdateProduct({ hasEdit, productId }) {
       responseImageUrl,
       imagePublicId,
       description: description,
+      inOffer: toggle,
+      discountPercentage,
+      bestSellers,
     });
   };
 
@@ -100,6 +114,9 @@ function UpdateProduct({ hasEdit, productId }) {
             price,
             description,
             countInStock,
+            inOffer: toggle,
+            discountPercentage,
+            bestSellers,
           },
         },
       });
@@ -109,6 +126,14 @@ function UpdateProduct({ hasEdit, productId }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  useEffect(() => {
+    console.log(discountPercentage);
+  }, [discountPercentage]);
+
+  const handleDiscountChange = (value) => {
+    setSelectedDiscount(value);
   };
 
   return (
@@ -214,7 +239,7 @@ function UpdateProduct({ hasEdit, productId }) {
             </div>
             <div className="mb-4 ">
               <div className="flex items-center  gap-3">
-                <Switch toggle={toggle} setToggle={setToggle} />
+                <SwitchOffer toggle={toggle} setToggle={setToggle} />
                 <label
                   htmlFor="product_price"
                   className="block   text-sm font-bold "
@@ -231,8 +256,9 @@ function UpdateProduct({ hasEdit, productId }) {
                       type="radio"
                       name="percentage"
                       id="10%"
-                      value="10%"
-                      defaultChecked
+                      value={10}
+                      defaultChecked={discountPercentage === 10}
+                      onChange={(e) => setDiscountPercentage(e.target.value)}
                     />
                     <label className="form-check-label" htmlFor="10%">
                       10%
@@ -244,7 +270,9 @@ function UpdateProduct({ hasEdit, productId }) {
                       type="radio"
                       name="percentage"
                       id="20%"
-                      value="20%"
+                      value={20}
+                      defaultChecked={discountPercentage === 20}
+                      onChange={(e) => setDiscountPercentage(e.target.value)}
                     />
                     <label className="form-check-label" htmlFor="20%">
                       20%
@@ -256,7 +284,9 @@ function UpdateProduct({ hasEdit, productId }) {
                       type="radio"
                       name="percentage"
                       id="50%"
-                      value="50%"
+                      value={50}
+                      defaultChecked={discountPercentage === 50}
+                      onChange={(e) => setDiscountPercentage(e.target.value)}
                     />
                     <label className="form-check-label" htmlFor="50%">
                       50%
@@ -264,6 +294,15 @@ function UpdateProduct({ hasEdit, productId }) {
                   </div>
                 </div>
               )}
+            </div>
+            <div className="flex items-center  gap-3">
+              <SwitchSellers toggle={bestSellers} setToggle={setBestSellers} />
+              <label
+                htmlFor="product_price"
+                className="block   text-sm font-bold "
+              >
+                Incluir en productos mas vendidos
+              </label>
             </div>
             <div className="mb-4">
               <label
