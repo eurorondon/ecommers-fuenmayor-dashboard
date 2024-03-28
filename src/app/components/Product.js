@@ -23,6 +23,8 @@ const Product = (props) => {
                   className="rounded-md "
                 />
               ) : (
+                // <span>.</span>
+                // <h1>hola</h1>
                 // <h1>{product.photo[0].url}</h1>
                 // <h1>sin imagen</h1>
                 <Image

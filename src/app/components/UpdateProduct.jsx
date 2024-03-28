@@ -28,12 +28,14 @@ function UpdateProduct({ hasEdit, productId }) {
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState([]);
   const [image, setImage] = useState("");
   const [publicIdCloudinary, setPublicIdCloudinary] = useState(null);
   const [toggle, setToggle] = useState(false);
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [bestSellers, setBestSellers] = useState(false);
+
+  console.log(file);
 
   // console.log("product id  desde update", productId);
 
@@ -73,20 +75,45 @@ function UpdateProduct({ hasEdit, productId }) {
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
   const handleSubmit = async () => {
-    let responseImageUrl;
-    let imagePublicId;
+    let responseImageUrl = [];
+    let imagePublicId = [];
+    let photo = [];
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+      if (file.length > 0) {
+        console.log("Más de un archivo");
+        for (let i = 0; i < file.length; i++) {
+          const formData = new FormData();
+          formData.append("file", file[i]);
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      console.log("esta es la data public_id", data.data.public_id);
-      responseImageUrl = data.data.url;
-      imagePublicId = data.data.public_id;
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await response.json();
+
+          photo.push({
+            url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
+            publicId: data.data.public_id, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
+          });
+          console.log(photo);
+        }
+        // Verificar si la respuesta del servidor es válida
+      } else {
+        console.log("una sola imagen");
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        console.log("esta es la data public_id", data.data.public_id);
+        photo.push({
+          url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
+          publicId: data.data.public_id, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
+        });
+      }
     }
 
     mutate({
@@ -95,6 +122,7 @@ function UpdateProduct({ hasEdit, productId }) {
       categories: [category, categoryList],
       responseImageUrl,
       imagePublicId,
+      photo,
       description: description,
       inOffer: toggle,
       discountPercentage,
@@ -400,7 +428,7 @@ function UpdateProduct({ hasEdit, productId }) {
                 multiple
                 type="file"
                 onChange={(e) => {
-                  setFile(e.target.files[0]);
+                  setFile(e.target.files);
                 }}
               />
             </div>

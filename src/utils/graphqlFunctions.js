@@ -24,6 +24,7 @@ export async function newProduct({
   categories,
   responseImageUrl,
   imagePublicId,
+  photo,
   inOffer,
   discountPercentage,
   bestSellers,
@@ -40,10 +41,11 @@ export async function newProduct({
         price,
         description,
         categories,
-        photo: {
-          url: responseImageUrl,
-          publicId: imagePublicId,
-        },
+        // photo: {
+        //   url: responseImageUrl,
+        //   publicId: imagePublicId,
+        // },
+        photo,
         inOffer,
         discountPercentage,
         bestSellers,
