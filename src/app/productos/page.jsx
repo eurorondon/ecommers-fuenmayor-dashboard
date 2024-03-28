@@ -19,23 +19,9 @@ function Productos() {
     },
   });
 
-  // const handleDelete = async (id, publicId) => {
-  //   try {
-  //     const response = await fetch(`/api/delete`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ publicId: publicId }),
-  //     });
-  //     // console.log(response);
-  //   } catch (error) {
-  //     console.error("Error de red al eliminar la imagen desde page", error);
-  //   }
-  // };
+  const handleDelete = async (id, photo) => {
+    const publicId = photo.map((item) => item.publicId);
 
-  const handleDelete = async (id, publicId) => {
-    console.log(id, publicId);
     const userConfirmed = window.confirm("Do you want to delete?");
     if (userConfirmed) {
       try {

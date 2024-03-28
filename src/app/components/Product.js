@@ -4,6 +4,7 @@ import Link from "next/link";
 
 const Product = (props) => {
   const { product, handleDelete } = props;
+  console.log(product);
 
   return (
     <>
@@ -52,9 +53,7 @@ const Product = (props) => {
                 <i className="fas fa-pen">Edit</i>
               </Link>
               <button
-                onClick={() =>
-                  handleDelete(product.id, product.photo[0].publicId)
-                }
+                onClick={() => handleDelete(product.id, product.photo)}
                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 p-2 pb-3 col-span-6 md:col-span-3"
               >
                 <i className="fas fa-trash-alt">Delete</i>
