@@ -1,10 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Amplify } from "aws-amplify";
-import amplifyconfig from "@/aws-exports";
-import { generateClient } from "aws-amplify/api";
-import { createProduct, updateProduct } from "@/graphql/mutations";
-import { getProduct } from "@/graphql/queries";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -13,18 +8,14 @@ import {
   newProduct,
   productDetails,
 } from "@/utils/graphqlFunctions";
-import SwitchOfert from "./SwitchOffer";
 import SwitchOffer from "./SwitchOffer";
 import SwitchSellers from "./SwitchOffer";
-
-Amplify.configure(amplifyconfig);
-const client = generateClient();
+import { handleDeleteImage, handleSubmit, handleUpdate } from "./querys";
 
 function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [categoryList, setCategoryList] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
@@ -37,10 +28,6 @@ function UpdateProduct({ hasEdit, productId }) {
   const inputFileRef = React.useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    console.log("arreglo de img", imageUrl);
-  }, [setImageUrl, imageUrl]);
-
   const queryClient = useQueryClient();
 
   // get product
@@ -51,7 +38,6 @@ function UpdateProduct({ hasEdit, productId }) {
       enabled: !!productId,
       onSuccess: (data) => {
         setName(data.name);
-        // setCategoryList(data?.categories[0]);
         setCategory(data.categories ? data?.categories[0] : "");
         setPrice(data.price);
         setDescription(data.description);
@@ -84,192 +70,54 @@ function UpdateProduct({ hasEdit, productId }) {
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
-  const handleSubmit = async () => {
-    let photo = [];
-    if (file) {
-      if (file.length > 0) {
-        console.log("Más de un archivo");
-        for (let i = 0; i < file.length; i++) {
-          const formData = new FormData();
-          formData.append("file", file[i]);
-
-          const response = await fetch("/api/upload", {
-            method: "POST",
-            body: formData,
-          });
-          const data = await response.json();
-
-          photo.push({
-            url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
-            publicId: data.data.public_id, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
-          });
-          console.log(photo);
-        }
-        // Verificar si la respuesta del servidor es válida
-      }
-      //  else {
-      //   console.log("una sola imagen");
-      //   const formData = new FormData();
-      //   formData.append("file", file);
-
-      //   const response = await fetch("/api/upload", {
-      //     method: "POST",
-      //     body: formData,
-      //   });
-      //   const data = await response.json();
-      //   console.log("esta es la data public_id", data.data.public_id);
-      //   photo.push({
-      //     url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
-      //     publicId: data.data.publicId, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
-      //   });
-      // }
-    }
-
-    mutate({
+  const handleClickForm = () => {
+    handleSubmit(
       name,
       price,
-      categories: [category, categoryList],
-      photo,
-      description: description,
-      inOffer: toggle,
+      countInStock,
+      category,
+      description,
+      toggle,
       discountPercentage,
       bestSellers,
-    });
+      file,
+      mutate
+    );
   };
 
-  const handleUpdate = async () => {
-    setIsLoading(true);
-    let photo = imageUrl;
-
-    if (file) {
-      if (file.length > 0) {
-        console.log("Más de un archivo");
-        for (let i = 0; i < file.length; i++) {
-          const formData = new FormData();
-          formData.append("file", file[i]);
-
-          const response = await fetch("/api/upload", {
-            method: "POST",
-            body: formData,
-          });
-          const data = await response.json();
-
-          photo.push({
-            url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
-            publicId: data.data.public_id, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
-          });
-        }
-      } else {
-        console.log("una sola imagen");
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await response.json();
-        console.log("esta es la data public_id", data.data.public_id);
-      }
-
-      try {
-        const result = await client.graphql({
-          query: updateProduct,
-          variables: {
-            input: {
-              id: productId,
-              name,
-              categories: category,
-              price,
-              description,
-              countInStock,
-              inOffer: toggle,
-              discountPercentage,
-              bestSellers,
-              // photo: imageUrl,
-              photo,
-            },
-          },
-        });
-
-        queryClient.invalidateQueries("GetProduct");
-        setFile(null);
-        inputFileRef.current.value = "";
-        // router.push("/productos");
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    try {
-      const result = await client.graphql({
-        query: updateProduct,
-        variables: {
-          input: {
-            id: productId,
-            name,
-            categories: category,
-            price,
-            description,
-            countInStock,
-            inOffer: toggle,
-            discountPercentage,
-            bestSellers,
-          },
-        },
-      });
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleClickUpdate = () => {
+    handleUpdate(
+      name,
+      price,
+      countInStock,
+      category,
+      description,
+      toggle,
+      discountPercentage,
+      bestSellers,
+      file,
+      imageUrl,
+      productId,
+      queryClient,
+      inputFileRef,
+      setIsLoading,
+      setFile
+    );
   };
 
-  const handleDeleteImage = async (id) => {
-    try {
-      const response = await fetch(`/api/delete`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ publicId: [id] }),
-      });
-      // console.log(response);
-    } catch (error) {
-      console.error("Error de red al eliminar la imagen desde page", error);
-    }
-
-    const filtrando = imageUrl.filter((item) => item.publicId !== id);
-    console.log("el id para filtrar = ", id);
-    console.log("filtrando", filtrando);
-
-    const filtrandoFormatted = filtrando.map((item) => ({
-      url: item.url,
-      publicId: item.publicId,
-    }));
-    try {
-      const result = await client.graphql({
-        query: updateProduct,
-        variables: {
-          input: {
-            id: productId,
-            name,
-            categories: category,
-            price,
-            photo: filtrandoFormatted,
-            inOffer: toggle,
-            discountPercentage,
-            bestSellers,
-          },
-        },
-      });
-
-      console.log(result);
-      queryClient.invalidateQueries("GetProduct");
-
-      // setName(""), setPrice(""), console.log(res);
-      // router.push("/productos");
-    } catch (error) {
-      console.log(error);
-    }
+  const handleClickDeleteImage = (id) => {
+    handleDeleteImage(
+      id,
+      imageUrl,
+      productId,
+      name,
+      category,
+      price,
+      toggle,
+      discountPercentage,
+      bestSellers,
+      queryClient
+    );
   };
 
   return (
@@ -304,7 +152,6 @@ function UpdateProduct({ hasEdit, productId }) {
               <div className="  ">
                 <select
                   className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-                  // value={selectedCategory}
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   {category ? (
@@ -312,7 +159,6 @@ function UpdateProduct({ hasEdit, productId }) {
                   ) : (
                     <option value="">Seleccione una categoría</option>
                   )}
-
                   {dataCategories?.map((category) => (
                     <option key={category.id} value={category.categoryName}>
                       {category.categoryName}
@@ -450,7 +296,7 @@ function UpdateProduct({ hasEdit, productId }) {
                       <div className="bg-red-600 absolute right-2  font-extrabold text-white z-10 rounded-full w-5 h-5 flex justify-center items-center">
                         <button
                           className=" "
-                          onClick={() => handleDeleteImage(item?.publicId)}
+                          onClick={() => handleClickDeleteImage(item?.publicId)}
                         >
                           X
                         </button>
@@ -480,7 +326,7 @@ function UpdateProduct({ hasEdit, productId }) {
             </div>
             <button
               className="bg-slate-950 text-white px-5 py-2 rounded-md"
-              onClick={hasEdit ? handleUpdate : handleSubmit}
+              onClick={hasEdit ? handleClickUpdate : handleClickForm}
             >
               {hasEdit ? "Update" : "Create"}
             </button>

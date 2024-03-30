@@ -20,6 +20,7 @@ const client = generateClient();
 export async function newProduct({
   name,
   price,
+  countInStock,
   description,
   categories,
   responseImageUrl,
@@ -39,6 +40,7 @@ export async function newProduct({
       input: {
         name,
         price,
+        countInStock,
         description,
         categories,
         // photo: {
