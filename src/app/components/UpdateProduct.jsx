@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Amplify } from "aws-amplify";
 import amplifyconfig from "@/aws-exports";
 import { generateClient } from "aws-amplify/api";
@@ -34,11 +34,13 @@ function UpdateProduct({ hasEdit, productId }) {
   const [toggle, setToggle] = useState(false);
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [bestSellers, setBestSellers] = useState(false);
+  const inputFileRef = React.useRef(null);
 
-  console.log("this is file ", file);
+  useEffect(() => {
+    console.log("arreglo de img", imageUrl);
+  }, [setImageUrl, imageUrl]);
+
   const queryClient = useQueryClient();
-
-  // console.log("product id  desde update", productId);
 
   const { data, status, error } = useQuery(
     ["GetProduct", productId],
@@ -46,13 +48,17 @@ function UpdateProduct({ hasEdit, productId }) {
     {
       enabled: !!productId,
       onSuccess: (data) => {
-        console.log(data);
         setName(data.name);
         // setCategoryList(data?.categories[0]);
         setCategory(data.categories ? data?.categories[0] : "");
         setPrice(data.price);
         setDescription(data.description);
-        setImageUrl(data.photo);
+
+        const photosInicio = data.photo.map((item) => ({
+          url: item.url,
+          publicId: item.publicId,
+        }));
+        setImageUrl(photosInicio);
         setPublicIdCloudinary(data?.photo[0]?.publicId);
         setCountInStock(data.countInStock);
         setToggle(data.inOffer);
@@ -61,8 +67,6 @@ function UpdateProduct({ hasEdit, productId }) {
       },
     }
   );
-
-  console.log(imageUrl);
 
   // New Product React Query
   const {
@@ -134,9 +138,7 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   const handleUpdate = async () => {
-    let responseImageUrl;
-    let imagePublicId;
-    let photo = [];
+    let photo = imageUrl;
 
     if (file) {
       if (file.length > 0) {
@@ -155,9 +157,7 @@ function UpdateProduct({ hasEdit, productId }) {
             url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
             publicId: data.data.public_id, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
           });
-          console.log("imprimiendo valor de photo = ", photo);
         }
-        // Verificar si la respuesta del servidor es válida
       } else {
         console.log("una sola imagen");
         const formData = new FormData();
@@ -169,10 +169,6 @@ function UpdateProduct({ hasEdit, productId }) {
         });
         const data = await response.json();
         console.log("esta es la data public_id", data.data.public_id);
-        photo.push({
-          url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
-          publicId: data.data.publicId, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
-        });
       }
 
       try {
@@ -189,32 +185,19 @@ function UpdateProduct({ hasEdit, productId }) {
               inOffer: toggle,
               discountPercentage,
               bestSellers,
-              // photo: {
-              //   url: responseImageUrl,
-              //   publicId: imagePublicId,
-              // },
+              // photo: imageUrl,
               photo,
             },
           },
         });
 
-        // setName(""), setPrice(""),
-        router.push("/productos");
+        queryClient.invalidateQueries("GetProduct");
+        setFile(null);
+        inputFileRef.current.value = "";
+        // router.push("/productos");
       } catch (error) {
         console.log(error);
       }
-      // try {
-      //   const response = await fetch(`/api/delete`, {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ publicId: publicIdCloudinary }),
-      //   });
-      //   // console.log(response);
-      // } catch (error) {
-      //   console.error("Error de red al eliminar la imagen desde page", error);
-      // }
     }
     try {
       const result = await client.graphql({
@@ -233,9 +216,6 @@ function UpdateProduct({ hasEdit, productId }) {
           },
         },
       });
-
-      router.push("/productos");
-      setName(""), setPrice(""), console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -289,10 +269,6 @@ function UpdateProduct({ hasEdit, productId }) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    // console.log(discountPercentage);
-  }, [discountPercentage]);
 
   const handleDiscountChange = (value) => {
     setSelectedDiscount(value);
@@ -525,6 +501,7 @@ function UpdateProduct({ hasEdit, productId }) {
 
             <div className="mb-4">
               <input
+                ref={inputFileRef}
                 className=" bg-amber-300 rounded-md"
                 multiple
                 type="file"
