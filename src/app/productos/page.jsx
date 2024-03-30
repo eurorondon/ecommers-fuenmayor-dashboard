@@ -10,8 +10,6 @@ function Productos() {
   //GET ALL PRODUCST WITH REACT QUERY
   const { data: productos } = useQuery("AllProducts", getProducts);
 
-  console.log(productos);
-
   //DELETE PRODUCT WITH REACT QUERY
   const { mutate } = useMutation(deleteProductFunction, {
     onSuccess: () => {

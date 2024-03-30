@@ -35,6 +35,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [bestSellers, setBestSellers] = useState(false);
   const inputFileRef = React.useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("arreglo de img", imageUrl);
@@ -42,6 +43,7 @@ function UpdateProduct({ hasEdit, productId }) {
 
   const queryClient = useQueryClient();
 
+  // get product
   const { data, status, error } = useQuery(
     ["GetProduct", productId],
     () => productDetails(productId),
@@ -79,11 +81,10 @@ function UpdateProduct({ hasEdit, productId }) {
     },
   });
 
+  // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
   const handleSubmit = async () => {
-    let responseImageUrl = [];
-    let imagePublicId = [];
     let photo = [];
     if (file) {
       if (file.length > 0) {
@@ -105,30 +106,29 @@ function UpdateProduct({ hasEdit, productId }) {
           console.log(photo);
         }
         // Verificar si la respuesta del servidor es válida
-      } else {
-        console.log("una sola imagen");
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await response.json();
-        console.log("esta es la data public_id", data.data.public_id);
-        photo.push({
-          url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
-          publicId: data.data.publicId, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
-        });
       }
+      //  else {
+      //   console.log("una sola imagen");
+      //   const formData = new FormData();
+      //   formData.append("file", file);
+
+      //   const response = await fetch("/api/upload", {
+      //     method: "POST",
+      //     body: formData,
+      //   });
+      //   const data = await response.json();
+      //   console.log("esta es la data public_id", data.data.public_id);
+      //   photo.push({
+      //     url: data.data.url, // Suponiendo que la URL de la imagen está en la propiedad 'url' de la respuesta
+      //     publicId: data.data.publicId, // Suponiendo que el publicId está en la propiedad 'public_id' de la respuesta
+      //   });
+      // }
     }
 
     mutate({
       name,
       price,
       categories: [category, categoryList],
-      responseImageUrl,
-      imagePublicId,
       photo,
       description: description,
       inOffer: toggle,
@@ -138,6 +138,7 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   const handleUpdate = async () => {
+    setIsLoading(true);
     let photo = imageUrl;
 
     if (file) {
@@ -216,6 +217,7 @@ function UpdateProduct({ hasEdit, productId }) {
           },
         },
       });
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -270,10 +272,6 @@ function UpdateProduct({ hasEdit, productId }) {
     }
   };
 
-  const handleDiscountChange = (value) => {
-    setSelectedDiscount(value);
-  };
-
   return (
     <div className=" flex-row h-screen flex justify-center items-center ">
       <div className="">
@@ -324,40 +322,6 @@ function UpdateProduct({ hasEdit, productId }) {
               </div>
             </div>
 
-            {/* <div className="mb-4">
-              <label
-                htmlFor="product_title"
-                className="block   text-sm font-bold mt-2 "
-              >
-                Categoria 2
-              </label>
-              <input
-                type="text"
-                placeholder="Opcional"
-                className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-                id="product_title"
-                // required
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </div> */}
-            {/* <div className="mb-4">
-              <label
-                htmlFor="product_title"
-                className="block   text-sm font-bold mt-2"
-              >
-                Categoria 3
-              </label>
-              <input
-                type="text"
-                placeholder="Opcional"
-                className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-                id="product_title"
-                // required
-                // value={category3}
-                onChange={(e) => setCategory3(e.target.value)}
-              />
-            </div> */}
             <div className="mb-4">
               <label
                 htmlFor="product_price"
@@ -472,32 +436,36 @@ function UpdateProduct({ hasEdit, productId }) {
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
-            <div className="flex">
-              {imageUrl &&
-                imageUrl.map((item) => (
-                  <div
-                    className="relative"
-                    key={item?.publicId}
-                    onClick={() => console.log(item?.publicId)}
-                  >
-                    <div className="bg-red-600 absolute right-2  font-extrabold text-white z-10 rounded-full w-5 h-5 flex justify-center items-center">
-                      <button
-                        className=" "
-                        onClick={() => handleDeleteImage(item?.publicId)}
-                      >
-                        X
-                      </button>
-                    </div>
+            {isLoading ? (
+              <h1 className="text-6xl">Cargando</h1>
+            ) : (
+              <div className="flex">
+                {imageUrl &&
+                  imageUrl.map((item) => (
+                    <div
+                      className="relative"
+                      key={item?.publicId}
+                      onClick={() => console.log(item?.publicId)}
+                    >
+                      <div className="bg-red-600 absolute right-2  font-extrabold text-white z-10 rounded-full w-5 h-5 flex justify-center items-center">
+                        <button
+                          className=" "
+                          onClick={() => handleDeleteImage(item?.publicId)}
+                        >
+                          X
+                        </button>
+                      </div>
 
-                    <Image
-                      src={item.url}
-                      width={150}
-                      height={150}
-                      alt="Imagen"
-                    />
-                  </div>
-                ))}
-            </div>
+                      <Image
+                        src={item.url}
+                        width={150}
+                        height={150}
+                        alt="Imagen"
+                      />
+                    </div>
+                  ))}
+              </div>
+            )}
 
             <div className="mb-4">
               <input

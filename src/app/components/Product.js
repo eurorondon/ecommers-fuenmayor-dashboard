@@ -4,7 +4,6 @@ import Link from "next/link";
 
 const Product = (props) => {
   const { product, handleDelete } = props;
-  console.log(product);
 
   return (
     <>
