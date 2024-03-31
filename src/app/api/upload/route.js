@@ -64,24 +64,8 @@ export async function POST(request) {
   } catch (error) {
     console.log("server err", error);
     return NextResponse.json(
-      { err: "Internal Server Error", info: error },
+      { err: error.message, info: "Internal Server Error" },
       { status: 500 }
     );
   }
-
-  // const response = await new Promise((resolve, reject) => {
-  //   cloudinary.uploader
-  //     .upload_stream({ folder: "Next.js" }, (err, result) => {
-  //       if (err) {
-  //         reject(err);
-  //       }
-  //       resolve(result);
-  //     })
-  //     .end(buffer);
-  // });
-
-  // return NextResponse.json({
-  //   message: "imagen subida",
-  //   data: response,
-  // });
 }
