@@ -8,8 +8,15 @@ cloudinary.config({
 });
 
 export async function POST(request) {
+  // const image = data.get("file");
   const data = await request.formData();
   const image = data.get("file");
+  const fileBuffer = await image.arrayBuffer();
+
+  var mime = image.type;
+  var encoding = "base64";
+  var base64Data = Buffer.from(fileBuffer).toString("base64");
+  var fileUri = "data:" + mime + ";" + encoding + "," + base64Data;
 
   // if (!image) {
   //   return NextResponse.json("no se ha encontrado ninguna imagen", {
@@ -17,24 +24,53 @@ export async function POST(request) {
   //   });
   // }
 
-  const bytes = await image.arrayBuffer();
-  const buffer = Buffer.from(bytes);
+  // const bytes = await image.arrayBuffer();
+  // const buffer = Buffer.from(bytes);
 
-  const response = await new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: "Next.js" }, (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      })
-      .end(buffer);
-  });
+  try {
+    const uploadToCloudinary = () => {
+      return new Promise((resolve, reject) => {
+        var result = cloudinary.uploader
+          .upload(fileUri, {
+            invalidate: true,
+          })
+          .then((result) => {
+            console.log(result);
+            resolve(result);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    };
 
-  return NextResponse.json({
-    message: "imagen subida",
-    data: response,
-  });
-  // console.log("recibiendo imagen");
-  // return NextResponse.json("recibiendo image", image);
+    const result = await uploadToCloudinary();
+
+    let imageUrl = result.secure_url;
+
+    return NextResponse.json(
+      { success: true, imageUrl: imageUrl },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("server err", error);
+    return NextResponse.json({ err: "Internal Server Error" }, { status: 500 });
+  }
+
+  // const response = await new Promise((resolve, reject) => {
+  //   cloudinary.uploader
+  //     .upload_stream({ folder: "Next.js" }, (err, result) => {
+  //       if (err) {
+  //         reject(err);
+  //       }
+  //       resolve(result);
+  //     })
+  //     .end(buffer);
+  // });
+
+  // return NextResponse.json({
+  //   message: "imagen subida",
+  //   data: response,
+  // });
 }
