@@ -85,6 +85,9 @@ const CategoriesTable = ({ setEditID }) => {
               <td>
                 <Image
                   src={
+                    category &&
+                    category.photo &&
+                    category.photo[0] &&
                     category.photo[0].url
                       ? category.photo[0].url
                       : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"

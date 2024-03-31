@@ -91,8 +91,7 @@ const CreateCategory = ({ editID, setEditID }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     let photo = [];
-    let responseImageUrl;
-    let imagePublicId;
+
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
@@ -120,6 +119,10 @@ const CreateCategory = ({ editID, setEditID }) => {
         console.log("no existe data");
       }
     }
+    mutate({
+      categoryName,
+      description,
+    });
     setFile(null);
     inputFileRef.current.value = "";
 
