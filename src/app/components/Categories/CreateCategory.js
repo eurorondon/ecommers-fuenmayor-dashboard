@@ -105,10 +105,7 @@ const CreateCategory = ({ editID, setEditID }) => {
         url: data.data.url,
         publicId: data.data.public_id,
       });
-      // console.log("esta es la data public_id", data.data.secure_url);
-      // console.log("esta es la data public_id", data);
-      responseImageUrl = data.data.secure_url;
-      imagePublicId = data.data.public_id;
+
       if (data) {
         mutate({
           categoryName,
