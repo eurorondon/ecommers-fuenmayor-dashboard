@@ -36,11 +36,10 @@ const CreateCategory = ({ editID, setEditID }) => {
 
   React.useEffect(() => {
     if (data) {
-      console.log(data);
-      // const resFilter = data?.filter((item) => item.id === editID);
+      const resFilter = data?.filter((item) => item.id === editID);
 
-      // setEditItem(resFilter[0]);
-      // console.log("Filtrado", resFilter);
+      setEditItem(resFilter[0]);
+      console.log("Filtrado", resFilter);
     }
   }, [editID, data]);
   // if (editItem) {
@@ -148,73 +147,115 @@ const CreateCategory = ({ editID, setEditID }) => {
   //   }
   // }, [categoryCreate.success, dispatch]);
 
-  // const handleUpdate = async (e) => {
-  //   e.preventDefault();
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
-  //   if (file) {
-  //     const formData = new FormData();
-  //     formData.append("file", file);
+    let photo = [];
 
-  //     const response = await fetch("/api/upload", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-  //     const data = await response.json();
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
 
-  //     if (data) {
-  //       try {
-  //         const result = await client.graphql({
-  //           query: updateCategories,
-  //           variables: {
-  //             input: {
-  //               id: editItem.id,
-  //               categoryName,
-  //               imgUrl: data.data.secure_url,
-  //               description,
-  //             },
-  //           },
-  //         });
-  //         // try {
-  //         //   const response = await fetch(`/api/delete`, {
-  //         //     method: "POST",
-  //         //     headers: {
-  //         //       "Content-Type": "application/json",
-  //         //     },
-  //         //     body: JSON.stringify({ publicId: [id] }),
-  //         //   });
-  //         //   // console.log(response);
-  //         // } catch (error) {
-  //         //   console.error("Error de red al eliminar la imagen desde page", error);
-  //         // }
-  //         // console.log(result);
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      console.log(data);
+      photo.push({
+        url: data.data.url,
+        publicId: data.data.public_id,
+      });
 
-  //         // setName(""), setPrice(""), console.log(res);
-  //         router.push("/productos");
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   }
+      try {
+        const result = await client.graphql({
+          query: updateCategories,
+          variables: {
+            input: {
+              id: editItem.id,
+              categoryName,
+              photo,
+              description,
+            },
+          },
+        });
 
-  //   const result = await client.graphql({
-  //     query: updateCategories,
-  //     variables: {
-  //       input: {
-  //         id: editID,
-  //         categoryName,
-  //         description,
-  //       },
-  //     },
-  //   });
-  //   console.log(result);
+        //  let id =  (editItem.photo[0].publicId);
+        try {
+          const response = await fetch(`/api/delete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ publicId: [editItem.photo[0].publicId] }),
+          });
 
-  //   queryClient.invalidateQueries("AllCategories");
-  //   setCategoryName("");
-  //   setDescription(" ");
-  //   setEditID("");
-  //   setFile(null);
-  //   inputFileRef.current.value = "";
-  // };
+          console.log("Imagen Borrada", response);
+        } catch (error) {
+          console.error("Error de red al eliminar la imagen desde page", error);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      // if (data) {
+      //   console.log("a ver que trae data", data.photo.publicId);
+      //   try {
+      //     const result = await client.graphql({
+      //       query: updateCategories,
+      //       variables: {
+      //         input: {
+      //           id: editItem.id,
+      //           categoryName,
+      //           photo,
+      //           description,
+      //         },
+      //       },
+      //     });
+      // try {
+      //   console.log("a ver que trae data", data.photo.publicId);
+      //   // const response = await fetch(`/api/delete`, {
+      //   //   method: "POST",
+      //   //   headers: {
+      //   //     "Content-Type": "application/json",
+      //   //   },
+      //   //   body: JSON.stringify({ publicId: [data.photo.publicId] }),
+      //   // });
+      // } catch (error) {
+      //   console.error(
+      //     "Error de red al eliminar la imagen desde page",
+      //     error
+      //   );
+      // }
+      //     // console.log(result);
+
+      //     // setName(""), setPrice(""), console.log(res);
+      //     // router.push("/productos");
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // }
+    }
+
+    const result = await client.graphql({
+      query: updateCategories,
+      variables: {
+        input: {
+          id: editID,
+          categoryName,
+          description,
+        },
+      },
+    });
+    console.log(result);
+
+    queryClient.invalidateQueries("AllCategories");
+    setCategoryName("");
+    setDescription(" ");
+    setEditID("");
+    setFile(null);
+    inputFileRef.current.value = "";
+  };
 
   return (
     <div className="col-md-12 col-lg-4">

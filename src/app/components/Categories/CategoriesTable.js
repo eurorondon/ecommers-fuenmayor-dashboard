@@ -17,6 +17,8 @@ const CategoriesTable = ({ setEditID }) => {
   const { data } = useQuery("AllCategories", getAllCategories);
   const queryClient = useQueryClient();
 
+  console.log(data);
+
   //DELETE PRODUCT WITH REACT QUERY
   const { mutate } = useMutation(deleteCategory, {
     onSuccess: () => {
@@ -24,8 +26,27 @@ const CategoriesTable = ({ setEditID }) => {
     },
   });
 
-  const deletehandler = (id) => {
+  const deletehandler = async (id) => {
+    const filter = data.filter((item) => item.id === id);
+    if (filter) {
+      console.log(filter?.id);
+      const publicId = filter[0].photo[0].publicId;
+    }
     if (window.confirm("¿Eliminar Categoria?")) {
+      try {
+        console.log(filter[0].photo.publicId);
+        const response = await fetch(`/api/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ publicId: [filter[0].photo[0].publicId] }),
+        });
+
+        console.log("Imagen Borrada", response);
+      } catch (error) {
+        console.error("Error de red al eliminar la imagen desde page", error);
+      }
       mutate(id);
     }
   };
@@ -64,8 +85,8 @@ const CategoriesTable = ({ setEditID }) => {
               <td>
                 <Image
                   src={
-                    category.imgUrl
-                      ? category.imgUrl
+                    category.photo[0].url
+                      ? category.photo[0].url
                       : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
                   }
                   alt="img"
