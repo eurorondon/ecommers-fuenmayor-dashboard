@@ -1,7 +1,0 @@
-{
-    "AppSyncApiName": "ecommersfuenmayorcli",
-    "DynamoDBBillingMode": "PAY_PER_REQUEST",
-    "DynamoDBEnableServerSideEncryption": false,
-    "S3DeploymentBucket": "amplify-ecommersfuenmayorcli-dev-202837-deployment",
-    "S3DeploymentRootKey": "amplify-appsync-files/04d5de92b46decf3651bd524fbe18ffd2a069d62"
-}
