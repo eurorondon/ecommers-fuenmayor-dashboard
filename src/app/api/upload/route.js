@@ -63,7 +63,10 @@ export async function POST(request) {
     return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (error) {
     console.log("server err", error);
-    return NextResponse.json({ err: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { err: "Internal Server Error", info: error },
+      { status: 500 }
+    );
   }
 
   // const response = await new Promise((resolve, reject) => {
