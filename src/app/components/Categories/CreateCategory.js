@@ -102,8 +102,8 @@ const CreateCategory = ({ editID, setEditID }) => {
       });
       const data = await response.json();
       photo.push({
-        url: data.data.url,
-        publicId: data.data.public_id,
+        url: data?.data?.url,
+        publicId: data?.data?.public_id,
       });
 
       if (data) {
@@ -165,8 +165,8 @@ const CreateCategory = ({ editID, setEditID }) => {
       const data = await response.json();
       console.log(data);
       photo.push({
-        url: data.data.url,
-        publicId: data.data.public_id,
+        url: data?.data?.url,
+        publicId: data?.data?.public_id,
       });
 
       try {
