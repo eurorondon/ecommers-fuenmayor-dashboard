@@ -115,11 +115,13 @@ const CreateCategory = ({ editID, setEditID }) => {
       } else {
         console.log("no existe data");
       }
+    } else {
+      mutate({
+        categoryName,
+        description,
+      });
     }
-    mutate({
-      categoryName,
-      description,
-    });
+
     setFile(null);
     inputFileRef.current.value = "";
 
