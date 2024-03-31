@@ -8,8 +8,8 @@ cloudinary.config({
 });
 
 export async function POST(request) {
-  // const data = await request.formData();
-  // const image = data.get("file");
+  const data = await request.formData();
+  const image = data.get("file");
 
   // if (!image) {
   //   return NextResponse.json("no se ha encontrado ninguna imagen", {
@@ -17,24 +17,24 @@ export async function POST(request) {
   //   });
   // }
 
-  // const bytes = await image.arrayBuffer();
-  // const buffer = Buffer.from(bytes);
+  const bytes = await image.arrayBuffer();
+  const buffer = Buffer.from(bytes);
 
-  // const response = await new Promise((resolve, reject) => {
-  //   cloudinary.uploader
-  //     .upload_stream({ folder: "Next.js" }, (err, result) => {
-  //       if (err) {
-  //         reject(err);
-  //       }
-  //       resolve(result);
-  //     })
-  //     .end(buffer);
-  // });
+  const response = await new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ folder: "Next.js" }, (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      })
+      .end(buffer);
+  });
 
-  // return NextResponse.json({
-  //   message: "imagen subida",
-  //   data: response,
-  // });
-  console.log("prueba");
-  return NextResponse.json("Prueba");
+  return NextResponse.json({
+    message: "imagen subida",
+    data: response,
+  });
+  // console.log("recibiendo imagen");
+  // return NextResponse.json("recibiendo image", image);
 }
