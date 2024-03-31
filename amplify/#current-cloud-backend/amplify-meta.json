@@ -1,49 +1,49 @@
 {
-    "providers": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-ecommersfuenmayorcli-dev-202837-authRole",
-            "UnauthRoleArn": "arn:aws:iam::851725473462:role/amplify-ecommersfuenmayorcli-dev-202837-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::851725473462:role/amplify-ecommersfuenmayorcli-dev-202837-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-ecommersfuenmayorcli-dev-202837-deployment",
-            "UnauthRoleName": "amplify-ecommersfuenmayorcli-dev-202837-unauthRole",
-            "StackName": "amplify-ecommersfuenmayorcli-dev-202837",
-            "StackId": "arn:aws:cloudformation:us-east-1:851725473462:stack/amplify-ecommersfuenmayorcli-dev-202837/9f90a8c0-eef5-11ee-8674-0e75aa85f423",
-            "AmplifyAppId": "d781kzfczu7lk"
-        }
-    },
-    "api": {
-        "ecommersfuenmayorcli": {
-            "service": "AppSync",
-            "providerPlugin": "awscloudformation",
-            "dependsOn": [],
-            "output": {
-                "authConfig": {
-                    "defaultAuthentication": {
-                        "authenticationType": "API_KEY",
-                        "apiKeyConfig": {
-                            "apiKeyExpirationDays": 7
-                        }
-                    },
-                    "additionalAuthenticationProviders": []
-                },
-                "GraphQLAPIIdOutput": "2trd5uxuebfn7jgusmpmc6ub5u",
-                "GraphQLAPIEndpointOutput": "https://p72ec7vpk5bqlmu7fa5xgqawou.appsync-api.us-east-1.amazonaws.com/graphql",
-                "GraphQLAPIKeyOutput": "da2-dscl3oee4ng6jnv72uz3o7xf54"
-            },
-            "providerMetadata": {
-                "s3TemplateURL": "https://s3.amazonaws.com/amplify-ecommersfuenmayorcli-dev-202837-deployment/amplify-cfn-templates/api/cloudformation-template.json",
-                "logicalId": "apiecommersfuenmayorcli"
-            },
-            "lastPushTimeStamp": "2024-03-31T00:40:50.626Z",
-            "lastPushDirHash": "lL6L/2uq2zm3kQ3PHG9biY8X1Kk="
-        }
-    },
-    "hosting": {
-        "amplifyhosting": {
-            "service": "amplifyhosting",
-            "type": "cicd",
-            "lastPushTimeStamp": "2024-03-31T00:52:07.099Z"
-        }
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ecommersfuenmayorcli-dev-202837-authRole",
+      "UnauthRoleArn": "arn:aws:iam::851725473462:role/amplify-ecommersfuenmayorcli-dev-202837-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::851725473462:role/amplify-ecommersfuenmayorcli-dev-202837-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-ecommersfuenmayorcli-dev-202837-deployment",
+      "UnauthRoleName": "amplify-ecommersfuenmayorcli-dev-202837-unauthRole",
+      "StackName": "amplify-ecommersfuenmayorcli-dev-202837",
+      "StackId": "arn:aws:cloudformation:us-east-1:851725473462:stack/amplify-ecommersfuenmayorcli-dev-202837/9f90a8c0-eef5-11ee-8674-0e75aa85f423",
+      "AmplifyAppId": "d781kzfczu7lk"
     }
+  },
+  "api": {
+    "ecommersfuenmayorcli": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        },
+        "GraphQLAPIIdOutput": "2trd5uxuebfn7jgusmpmc6ub5u",
+        "GraphQLAPIEndpointOutput": "https://p72ec7vpk5bqlmu7fa5xgqawou.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-dscl3oee4ng6jnv72uz3o7xf54"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2024-03-31T02:12:38.374Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-ecommersfuenmayorcli-dev-202837-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apiecommersfuenmayorcli"
+      },
+      "lastPushDirHash": "lL6L/2uq2zm3kQ3PHG9biY8X1Kk="
+    }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "lastPushTimeStamp": "2024-03-31T00:52:07.099Z",
+      "service": "amplifyhosting",
+      "type": "cicd"
+    }
+  }
 }

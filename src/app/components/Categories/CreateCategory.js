@@ -45,10 +45,6 @@ const CreateCategory = ({ editID, setEditID }) => {
     console.log(editItem);
   }
 
-  useEffect(() => {
-    console.log(file);
-  }, [setFile, file]);
-
   const client = generateClient();
 
   const queryClient = useQueryClient();
@@ -100,19 +96,20 @@ const CreateCategory = ({ editID, setEditID }) => {
         body: formData,
       });
       const data = await response.json();
+      console.log(data);
       // console.log("esta es la data public_id", data.data.secure_url);
       // console.log("esta es la data public_id", data);
-      responseImageUrl = data.data.secure_url;
-      imagePublicId = data.data.public_id;
-      if (data) {
-        mutate({
-          categoryName,
-          imgUrl: data.data.secure_url,
-          description,
-        });
-      } else {
-        console.log("no existe data");
-      }
+      // responseImageUrl = data.data.secure_url;
+      // imagePublicId = data.data.public_id;
+      // if (data) {
+      //   mutate({
+      //     categoryName,
+      //     imgUrl: data.data.secure_url,
+      //     description,
+      //   });
+      // } else {
+      //   console.log("no existe data");
+      // }
     }
     setFile(null);
     inputFileRef.current.value = "";

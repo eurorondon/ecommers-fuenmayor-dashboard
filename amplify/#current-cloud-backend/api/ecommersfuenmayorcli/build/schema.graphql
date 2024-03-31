@@ -223,6 +223,7 @@ input ModelProductFilterInput {
   inOffer: ModelBooleanInput
   discountPercentage: ModelFloatInput
   bestSellers: ModelBooleanInput
+  id: ModelIDInput
   and: [ModelProductFilterInput]
   or: [ModelProductFilterInput]
   not: ModelProductFilterInput
@@ -319,6 +320,7 @@ input ModelSubscriptionProductFilterInput {
   inOffer: ModelSubscriptionBooleanInput
   discountPercentage: ModelSubscriptionFloatInput
   bestSellers: ModelSubscriptionBooleanInput
+  id: ModelSubscriptionIDInput
   and: [ModelSubscriptionProductFilterInput]
   or: [ModelSubscriptionProductFilterInput]
 }
@@ -342,6 +344,8 @@ input ModelCategoriesFilterInput {
   categoryName: ModelStringInput
   description: ModelStringInput
   imgUrl: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
   and: [ModelCategoriesFilterInput]
   or: [ModelCategoriesFilterInput]
   not: ModelCategoriesFilterInput
@@ -354,6 +358,8 @@ input ModelCategoriesConditionInput {
   and: [ModelCategoriesConditionInput]
   or: [ModelCategoriesConditionInput]
   not: ModelCategoriesConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
 }
 
 input CreateCategoriesInput {
@@ -379,6 +385,8 @@ input ModelSubscriptionCategoriesFilterInput {
   categoryName: ModelSubscriptionStringInput
   description: ModelSubscriptionStringInput
   imgUrl: ModelSubscriptionStringInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
   and: [ModelSubscriptionCategoriesFilterInput]
   or: [ModelSubscriptionCategoriesFilterInput]
 }

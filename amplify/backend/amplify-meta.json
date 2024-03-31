@@ -31,7 +31,7 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2024-03-31T00:47:15.702Z",
+      "lastPushTimeStamp": "2024-03-31T12:54:55.517Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-ecommersfuenmayorcli-dev-202837-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apiecommersfuenmayorcli"
