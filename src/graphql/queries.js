@@ -59,6 +59,10 @@ export const listProducts = /* GraphQL */ `
         bestSellers
         id
         __typename
+        photo {
+          url
+          publicId
+        }
       }
       nextToken
       __typename

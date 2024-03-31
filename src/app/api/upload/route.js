@@ -26,12 +26,23 @@ export async function POST(request) {
 
   // const bytes = await image.arrayBuffer();
   // const buffer = Buffer.from(bytes);
+  // const response = await new Promise((resolve, reject) => {
+  //   cloudinary.uploader
+  //     .upload_stream({ folder: "Next.js" }, (err, result) => {
+  //       if (err) {
+  //         reject(err);
+  //       }
+  //       resolve(result);
+  //     })
+  //     .end(buffer);
+  // });
 
   try {
     const uploadToCloudinary = () => {
       return new Promise((resolve, reject) => {
         var result = cloudinary.uploader
           .upload(fileUri, {
+            folder: "Next.js",
             invalidate: true,
           })
           .then((result) => {
@@ -49,10 +60,7 @@ export async function POST(request) {
 
     let imageUrl = result.secure_url;
 
-    return NextResponse.json(
-      { success: true, imageUrl: imageUrl },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (error) {
     console.log("server err", error);
     return NextResponse.json({ err: "Internal Server Error" }, { status: 500 });
