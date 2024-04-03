@@ -7,7 +7,7 @@ const Product = (props) => {
 
   return (
     <>
-      <div className=" flex flex-col justify-center items-center">
+      <div className=" flex flex-col justify-center items-center z-0">
         <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm h-80 relative overflow-hidden">
           <Link href={`/`}>
             <div className="img-wrap">

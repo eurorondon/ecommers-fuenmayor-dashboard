@@ -3,6 +3,7 @@
 import Product from "../components/Product";
 import { deleteProductFunction, getProducts } from "@/utils/graphqlFunctions";
 import { useQueryClient, useMutation, useQuery } from "react-query";
+import DrawerMenu from "../components/DrawerMenu";
 
 function Productos() {
   const queryClient = useQueryClient();
@@ -43,14 +44,17 @@ function Productos() {
   };
 
   return (
-    <div className="container my-20 grid grid-cols-5 md:grid-cols-2 lg:grid-cols-5 gap-4">
-      {productos &&
-        productos.map((product) => (
-          <div className="" key={product.id}>
-            <Product product={product} handleDelete={handleDelete} />
-          </div>
-        ))}
-    </div>
+    <>
+      <DrawerMenu />
+      <div className="  grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5  p-10 ">
+        {productos &&
+          productos.map((product) => (
+            <div className="z-0" key={product.id}>
+              <Product product={product} handleDelete={handleDelete} />
+            </div>
+          ))}
+      </div>
+    </>
   );
 }
 

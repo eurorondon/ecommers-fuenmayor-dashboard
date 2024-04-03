@@ -1,9 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "./components/providers/ReactQueryProvider";
-import Sidebar from "./components/Sidebar";
 import Product from "./components/Product";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import SidebarUi from "./components/Sidebar";
+import FlowNavbar from "./components/FlowNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,14 +16,21 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="">
         <ReactQueryProvider>
-          <div className="flex">
-            <div className="w-1/6">
-              {/* Contenido del slider */}
-              <Sidebar />
+          <div className="hidden lg:block sticky top-0 z-10">
+            <FlowNavbar />
+          </div>
+          <div className=" lg:flex lg:flex-row ">
+            {/* <div className="  "> */}
+            {/* <div className="w-1/6"> */}
+            <div className="lg:basis-2/12  ">
+              <div className=" h-full hidden lg:block   ">
+                <SidebarUi />
+              </div>
             </div>
-            <div className="w-5/6">
+
+            <div className="basis-11/12">
               {/* Contenido del otro componente */}
               {children}
             </div>

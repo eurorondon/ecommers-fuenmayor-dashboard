@@ -1,118 +1,82 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { usePathname } from "next/navigation";
 
-const Sidebar = () => {
+import React, { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Sidebar } from "flowbite-react";
+import {
+  HiArrowSmRight,
+  HiChartPie,
+  HiInbox,
+  HiShoppingBag,
+  HiTable,
+  HiUser,
+} from "react-icons/hi";
+
+const SidebarUi = () => {
   const pathname = usePathname();
+  const [mostrarMenu, setMostrarMenu] = useState(true);
+  const menuRef = useRef(null);
+
+  const toggleMenu = () => {
+    setMostrarMenu(!mostrarMenu);
+  };
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMostrarMenu(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (window.innerWidth <= 768) {
+  //     // Cambia el tamaño de la pantalla según tus necesidades
+  //     document.addEventListener("mousedown", handleClickOutside);
+
+  //     return () => {
+  //       document.removeEventListener("mousedown", handleClickOutside);
+  //     };
+  //   }
+  // }, []);
 
   return (
-    <div className="">
-      <aside className="navbar-aside " id="offcanvas_aside">
-        <div className="aside-top ">
-          {/* <Link href={"/"} className="brand-wrap">
-            <Image
-              src="/images/logo.png"
-              style={{ height: "46" }}
-              className="logo"
-              alt="Ecommerce dashboard template"
-            />
-          </Link> */}
-          <div>
-            <button className="btn btn-icon btn-aside-minimize">
-              <i className="text-muted fas fa-stream"></i>
-            </button>
-          </div>
-        </div>
-
-        <nav>
-          <ul className="menu-aside">
-            <li className="menu-item">
-              <Link
-                className={pathname === "/" ? "active menu-link" : "menu-link"}
-                href={"/"}
-                exact="true"
-              >
-                <i className="icon fas fa-home"></i>
-                <span className="text">Panel Admin</span>
-              </Link>
-            </li>
-
-            <li className="menu-item">
-              <Link
-                className={
-                  pathname === "/productos" ? "active menu-link" : "menu-link"
-                }
-                href="/productos"
-              >
-                <i className="icon fas fa-cart-plus"></i>
-                <span className="text">Productos</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link
-                className={
-                  pathname === "/add-product" ? "active menu-link" : "menu-link"
-                }
-                href="/add-product"
-              >
-                <i className="icon fas fa-cart-plus"></i>
-                <span className="text">Nuevo producto</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link
-                className={
-                  pathname === "/categorias" ? "active menu-link" : "menu-link"
-                }
-                href={"/categories"}
-              >
-                <i className="icon fas fa-list"></i>
-                <span className="text">Categories</span>
-              </Link>
-            </li>
-
-            <li className="menu-item">
-              <Link className="menu-link" href={"/"}>
-                <i className="icon fas fa-bags-shopping"></i>
-                <span className="text">Ordenes</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link className="menu-link " href={"/"}>
-                <i className="icon fas fa-user"></i>
-                <span className="text">Clientes</span>
-              </Link>
-            </li>
-            {/* <li className="menu-item">
-              <NavLink
-                activeClassName="active"
-                className="menu-link disabled"
-                to="/sellers"
-              >
-                <i className="icon fas fa-store-alt"></i>
-                <span className="text">Sellers</span>
-              </NavLink>
-            </li> */}
-
-            {/* <li className="menu-item">
-              <NavLink
-                activeClassName="active"
-                className="menu-link disabled"
-                to="/transaction"
-              >
-                <i className="icon fas fa-usd-circle"></i>
-                <span className="text">Transactions</span>
-              </NavLink>
-            </li> */}
-          </ul>
-          <br />
-          <br />
-        </nav>
-      </aside>
-    </div>
+    <>
+      <div className=" sticky top-12 text-white h-screen    ">
+        <Sidebar
+          aria-label="Sidebar with multi-level dropdown example"
+          className="w-full "
+        >
+          <Sidebar.Items>
+            <Sidebar.ItemGroup>
+              <Sidebar.Item href="#" icon={HiChartPie}>
+                Dashboard
+              </Sidebar.Item>
+              <Sidebar.Collapse icon={HiShoppingBag} label="E-commerce">
+                <Sidebar.Item href="#">Products</Sidebar.Item>
+                <Sidebar.Item href="#">Sales</Sidebar.Item>
+                <Sidebar.Item href="#">Refunds</Sidebar.Item>
+                <Sidebar.Item href="#">Shipping</Sidebar.Item>
+              </Sidebar.Collapse>
+              <Sidebar.Item href="#" icon={HiInbox}>
+                Inbox
+              </Sidebar.Item>
+              <Sidebar.Item href="#" icon={HiUser}>
+                Users
+              </Sidebar.Item>
+              <Sidebar.Item href="#" icon={HiShoppingBag}>
+                Products
+              </Sidebar.Item>
+              <Sidebar.Item href="#" icon={HiArrowSmRight}>
+                Sign In
+              </Sidebar.Item>
+              <Sidebar.Item href="#" icon={HiTable}>
+                Sign Up
+              </Sidebar.Item>
+            </Sidebar.ItemGroup>
+          </Sidebar.Items>
+        </Sidebar>
+      </div>
+    </>
   );
 };
 
-export default Sidebar;
+export default SidebarUi;
