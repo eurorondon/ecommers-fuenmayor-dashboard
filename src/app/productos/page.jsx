@@ -93,7 +93,7 @@ function Productos() {
   const handleDelete = async (id, photo) => {
     const publicId = photo.map((item) => item.publicId);
 
-    const userConfirmed = window.confirm("Do you want to delete?");
+    const userConfirmed = window.confirm("¿Seguro de Eliminar este Producto?");
     if (userConfirmed) {
       try {
         const response = await fetch(`/api/delete`, {
@@ -109,6 +109,7 @@ function Productos() {
       }
       try {
         mutate(id);
+        queryClient.invalidateQueries("AllProducts");
       } catch (error) {
         console.log(error);
       }
@@ -152,6 +153,8 @@ function Productos() {
                   price={product.price}
                   offer={product.inOffer}
                   discountPercentage={product.discountPercentage}
+                  photo={product.photo}
+                  handleDelete={handleDelete}
                 />
               </div>
             </div>
