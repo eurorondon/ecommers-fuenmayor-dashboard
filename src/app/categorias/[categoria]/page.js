@@ -39,7 +39,7 @@ function Page() {
           const productsData = await client.graphql({
             query: listProducts,
             variables: {
-              limit: 10,
+              // limit: 100,
               filter: { categories: { contains: categoria } },
               nextToken: pageParam,
             },
