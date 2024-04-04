@@ -2,6 +2,7 @@ import { updateProduct } from "@/graphql/mutations";
 import { Amplify } from "aws-amplify";
 import amplifyconfig from "@/aws-exports";
 import { generateClient } from "aws-amplify/api";
+import { Router } from "next/router";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -116,7 +117,7 @@ export const handleUpdate = async (
       queryClient.invalidateQueries("GetProduct");
       setFile(null);
       inputFileRef.current.value = "";
-      // router.push("/productos");
+      // Router.push("/productos");
     } catch (error) {
       console.log(error);
     }

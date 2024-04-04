@@ -103,6 +103,7 @@ function UpdateProduct({ hasEdit, productId }) {
       setIsLoading,
       setFile
     );
+    // router.push("/productos");
   };
 
   const handleClickDeleteImage = (id) => {

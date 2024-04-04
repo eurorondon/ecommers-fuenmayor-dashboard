@@ -128,7 +128,7 @@ const Product = (props) => {
                 <MdEdit className="size-4 " />
               </Link>
               <button
-                onClick={() => handleDelete(product.id, product.photo)}
+                onClick={() => handleDelete(id, product.photo)}
                 className="bg-red-400 text-white  px-3 py-3 lg:px-3 lg:py-2 rounded-md hover:bg-red-600 p-2 pb-3 col-span-6 md:col-span-3"
               >
                 <MdDelete className="size-4 " />
