@@ -1,4 +1,5 @@
 import { Sidebar } from "flowbite-react";
+import Link from "next/link";
 import React from "react";
 import {
   HiArrowSmRight,
@@ -26,24 +27,23 @@ function SideBarComponent({ toggleMenu }) {
       </div>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="/" icon={HiChartPie}>
-            Dashboard
-          </Sidebar.Item>
-          <Sidebar.Item href="/productos" icon={HiShoppingBag}>
-            Productos
-          </Sidebar.Item>
-          <Sidebar.Item href="/add-product" icon={HiUser}>
-            Nuevo Producto
-          </Sidebar.Item>
-          <Sidebar.Collapse icon={HiShoppingBag} label="Categorias">
-            <Sidebar.Item href="#">Products</Sidebar.Item>
-            <Sidebar.Item href="#">Sales</Sidebar.Item>
-            <Sidebar.Item href="#">Refunds</Sidebar.Item>
-            <Sidebar.Item href="#">Shipping</Sidebar.Item>
-          </Sidebar.Collapse>
-          <Sidebar.Item href="/categories" icon={HiInbox}>
-            Nueva Categoria
-          </Sidebar.Item>
+          <Link href={"/"} onClick={toggleMenu}>
+            <Sidebar.Item icon={HiChartPie}>Dashboard</Sidebar.Item>
+          </Link>
+          <Link href={"/productos"} onClick={toggleMenu}>
+            <Sidebar.Item icon={HiShoppingBag}>Productos</Sidebar.Item>
+          </Link>
+          <Link href="/add-product" onClick={toggleMenu}>
+            <Sidebar.Item icon={HiUser}>Nuevo Producto</Sidebar.Item>
+          </Link>
+          <Link href="/categorias" onClick={toggleMenu}>
+            <Sidebar.Item icon={HiShoppingBag}>Categorias</Sidebar.Item>
+          </Link>
+
+          <Link href="/categories" onClick={toggleMenu}>
+            <Sidebar.Item icon={HiInbox}>Nueva Categoria</Sidebar.Item>
+          </Link>
+
           {/* <Sidebar.Item href="#" icon={HiUser}>
             Nuevo Producto
           </Sidebar.Item> */}
@@ -61,3 +61,20 @@ function SideBarComponent({ toggleMenu }) {
 }
 
 export default SideBarComponent;
+
+{
+  /* <Sidebar.Collapse icon={HiShoppingBag} label="Categorias">
+            <Sidebar.Item href="#">Products</Sidebar.Item>
+            <Sidebar.Item href="#">Sales</Sidebar.Item>
+            <Sidebar.Item href="#">Refunds</Sidebar.Item>
+            <Sidebar.Item href="#">Shipping</Sidebar.Item>
+            <Sidebar.Item href="#">Products</Sidebar.Item>
+            <Sidebar.Item href="#">Sales</Sidebar.Item>
+            <Sidebar.Item href="#">Refunds</Sidebar.Item>
+            <Sidebar.Item href="#">Shipping</Sidebar.Item>
+            <Sidebar.Item href="#">Products</Sidebar.Item>
+            <Sidebar.Item href="#">Sales</Sidebar.Item>
+            <Sidebar.Item href="#">Refunds</Sidebar.Item>
+            <Sidebar.Item href="#">Shipping</Sidebar.Item>
+          </Sidebar.Collapse> */
+}

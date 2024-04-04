@@ -6,8 +6,6 @@ import { MdDelete, MdEdit } from "react-icons/md";
 const Product = (props) => {
   const { product, url, handleDelete, id, photo } = props;
 
-  console.log(photo);
-
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md">
       {/* <div className=" flex flex-col justify-center items-center z-0"> */}
