@@ -1,6 +1,7 @@
 "use client";
 import { getAllCategories } from "@/utils/graphqlFunctions";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { useQuery } from "react-query";
 
@@ -20,7 +21,8 @@ function Page() {
       }}
     >
       {data?.map((category, index) => (
-        <div
+        <Link
+          href={`categorias/${category.categoryName}`}
           className="bg-blue-100 flex flex-col p-5 rounded-md justify-center items-center   "
           key={index}
         >
@@ -48,7 +50,7 @@ function Page() {
           </div>
 
           <span className="font-semibold">{category.categoryName}</span>
-        </div>
+        </Link>
       ))}
     </div>
   );
