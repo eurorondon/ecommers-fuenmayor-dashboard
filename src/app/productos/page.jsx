@@ -45,8 +45,7 @@ function Productos() {
 
   return (
     <>
-      <DrawerMenu />
-      <div className="  grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5  p-10 ">
+      <div className="  grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5  p-10 ">
         {productos &&
           productos.map((product) => (
             <div className="z-0" key={product.id}>

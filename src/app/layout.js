@@ -2,9 +2,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "./components/providers/ReactQueryProvider";
 import Product from "./components/Product";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import SidebarUi from "./components/Sidebar";
 import FlowNavbar from "./components/FlowNavbar";
+import DrawerMenu from "./components/DrawerMenu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +18,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="">
         <ReactQueryProvider>
+          <div className="lg:block">
+            <DrawerMenu />
+          </div>
           <div className="hidden lg:block sticky top-0 z-10">
             <FlowNavbar />
           </div>

@@ -16,7 +16,6 @@ import DrawerMenu from "./components/DrawerMenu";
 const MenuHamburguesa = () => {
   return (
     <>
-      <DrawerMenu />
       <h1>hola</h1>
     </>
   );

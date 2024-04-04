@@ -6,33 +6,37 @@ import React from "react";
 
 function FlowNavbar() {
   return (
-    <div>
-      <Navbar fluid rounded>
-        <Navbar.Brand as={Link} href="/">
+    <div className=" bg-white  ">
+      <div className="flex flex-row items-center">
+        <div className=" basis-3/12 ps-5 flex items-center p-2">
           <Image
-            width={40}
-            height={400}
-            src="/images/logo.jpg"
-            className=" rounded-full"
-            alt="Fuenmayor"
+            src={"/images/logo.jpg"}
+            width={50}
+            height={50}
+            alt="Multitienda"
+            className="rounded-full"
           />
-          <span className=" ms-5  font-bold self-center whitespace-nowrap text-xl  dark:text-white">
-            Multi Tienda Rubio Fuenmayor
+          <span className="text-center ms-5 font-bold">
+            Multitienda Rubio <br /> Fuenmayor
           </span>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-          <Navbar.Link href="#" active>
-            Home
-          </Navbar.Link>
-          <Navbar.Link as={Link} href="#">
-            About
-          </Navbar.Link>
-          <Navbar.Link href="#">Services</Navbar.Link>
-          <Navbar.Link href="#">Pricing</Navbar.Link>
-          <Navbar.Link href="#">Contact</Navbar.Link>
-        </Navbar.Collapse>
-      </Navbar>
+        </div>
+
+        <div className="bg-blue-300 basis-7/12 ">
+          <form className="input-group " onSubmit={console.log("first")}>
+            <input
+              type="search"
+              className="form-control rounded-left search w-11/12 "
+              placeholder="Search"
+
+              // onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <button type="submit" className="search-button w-1/12">
+              search
+            </button>
+          </form>
+        </div>
+        <div className="basis-2/12 bg-green-400"></div>
+      </div>
     </div>
   );
 }
