@@ -4,9 +4,7 @@ import Link from "next/link";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 const Product = (props) => {
-  const { product, url, handleDelete } = props;
-
-  console.log("esto es foto", url);
+  const { product, url, handleDelete, id } = props;
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md">
@@ -17,7 +15,7 @@ const Product = (props) => {
       >
         {/* <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm h-80 relative overflow-hidden"> */}
         <div className="bg-white">
-          <Link href={`/product/${product?.id}/edit`}>
+          <Link href={`/product/${id}/edit`}>
             <div className="w-full">
               {url ? (
                 <img
@@ -124,7 +122,7 @@ const Product = (props) => {
             )}
             <div className="absolute top-2 right-3 flex justify-end ">
               <Link
-                href={`/product/${product?.id}/edit`}
+                href={`/product/${id}/edit`}
                 className="bg-green-500 mr-2 text-white  flex items-center justify-center px-3 py-3 lg:px-3 lg:py-2 rounded-md hover:bg-green-600 p-2 pb-3 col-span-6 md:col-span-3"
               >
                 <MdEdit className="size-4 " />

@@ -26,6 +26,11 @@ function Productos() {
   //GET ALL PRODUCST WITH REACT QUERY
   // const { data: productos } = useQuery("AllProducts", getProducts);
 
+  // const handleNavigate = (id) => {
+  //   window.scroll(0, 0);
+  //   navigate(`/products/${id}`);
+  // };
+
   const { data, isLoading, hasNextPage, fetchNextPage, refetch, isFetching } =
     useInfiniteQuery(
       [category ? `infinity-products-${category}` : "infinity-products"],
@@ -78,8 +83,6 @@ function Productos() {
       []
     ) ?? [];
 
-  console.log(products);
-
   //DELETE PRODUCT WITH REACT QUERY
   const { mutate } = useMutation(deleteProductFunction, {
     onSuccess: () => {
@@ -112,8 +115,6 @@ function Productos() {
     }
   };
 
-  console.log(products[0]?.photo[0].url);
-
   return (
     <>
       {/* <div className="  grid grid-cols-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 md:p-10 lg:p-10 p-2 gap-0  ">
@@ -140,10 +141,11 @@ function Productos() {
               <div
                 style={{ cursor: "pointer" }}
                 className=""
-                onClick={() => handleNavigate(product.id)}
+                // onClick={() => handleNavigate(product.id)}
                 //  to={`/products/${product.id}`}
               >
                 <Product
+                  id={product.id}
                   url={product?.photo[0]?.url}
                   name={product.name}
                   description={product.description}
