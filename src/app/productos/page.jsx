@@ -45,7 +45,7 @@ function Productos() {
 
   return (
     <>
-      <div className="  grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5  p-10 ">
+      <div className="  grid grid-cols-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 md:p-10 lg:p-10 p-2 gap-0  ">
         {productos &&
           productos.map((product) => (
             <div className="z-0" key={product.id}>
