@@ -2,9 +2,21 @@
 import { Navbar } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import React from "react";
+import { useQueryClient } from "react-query";
 
 function FlowNavbar() {
+  const queryClient = useQueryClient();
+  const [searchInput, setSearchInput] = React.useState("");
+  const router = useRouter();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    router.push(`/keyword?search=${searchInput}`);
+    setSearchInput("");
+  };
   return (
     <div className=" bg-white  ">
       <div className="flex flex-row items-center">
@@ -22,13 +34,13 @@ function FlowNavbar() {
         </div>
 
         <div className="bg-blue-300 basis-7/12 ">
-          <form className="input-group " onSubmit={console.log("first")}>
+          <form className="input-group " onSubmit={(e) => handleSubmit(e)}>
             <input
               type="search"
+              value={searchInput}
               className="form-control rounded-left search w-11/12 "
               placeholder="Search"
-
-              // onChange={(e) => setSearchInput(e.target.value)}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
             <button type="submit" className="search-button w-1/12">
               search

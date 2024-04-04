@@ -14,9 +14,19 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import SideBarComponent from "./SideBarComponent";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function DrawerMenu() {
   const [mostrarMenu, setMostrarMenu] = useState(false);
+
+  const [searchInput, setSearchInput] = React.useState("");
+  const router = useRouter();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    router.push(`/keyword?search=${searchInput}`);
+    setSearchInput("");
+  };
 
   const toggleMenu = () => {
     setMostrarMenu(!mostrarMenu);
@@ -36,13 +46,13 @@ function DrawerMenu() {
         </div>
 
         <div className=" basis-8/12 md:basis-6/12 ">
-          <form className="input-group " onSubmit={console.log("first")}>
+          <form className="input-group " onSubmit={(e) => handleSubmit(e)}>
             <input
               type="search"
               className="form-control rounded-left search w-11/12 "
               placeholder="Search"
-
-              // onChange={(e) => setSearchInput(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
             <button type="submit" className="search-button w-1/12 p-2">
               <FaSearch />
