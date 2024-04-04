@@ -10,8 +10,10 @@ import {
   HiTable,
   HiUser,
 } from "react-icons/hi";
+import { FaSearch } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import SideBarComponent from "./SideBarComponent";
+import Image from "next/image";
 
 function DrawerMenu() {
   const [mostrarMenu, setMostrarMenu] = useState(false);
@@ -23,15 +25,40 @@ function DrawerMenu() {
   return (
     <div className="sticky top-0 z-10 lg:hidden ">
       {/* <FlowNavbar /> */}
-      <div className=" bg-white flex justify-between items-center py-2 px-3 my-0">
-        <button
-          className="border bg-white border-l-2 rounded-md p-1 "
-          onClick={toggleMenu}
-        >
-          <MdOutlineMenu size={30} />
-        </button>
+      <div className=" bg-white flex flex-row items-center  px-3 md:px-5 py-3">
+        <div className=" basis-2/12 md:basis-3/12">
+          <button
+            className="border bg-white border-l-2 rounded-md p-1 "
+            onClick={toggleMenu}
+          >
+            <MdOutlineMenu size={30} />
+          </button>
+        </div>
 
-        <h1>Adios </h1>
+        <div className=" basis-8/12 md:basis-6/12 ">
+          <form className="input-group " onSubmit={console.log("first")}>
+            <input
+              type="search"
+              className="form-control rounded-left search w-11/12 "
+              placeholder="Search"
+
+              // onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <button type="submit" className="search-button w-1/12 p-2">
+              <FaSearch />
+            </button>
+          </form>
+        </div>
+
+        <div className="basis-2/12 md:basis-3/12 flex justify-end ">
+          <Image
+            src={"/images/logo.jpg"}
+            width={50}
+            height={50}
+            alt="Multitienda"
+            className="rounded-full"
+          />
+        </div>
 
         <div
           className={` absolute

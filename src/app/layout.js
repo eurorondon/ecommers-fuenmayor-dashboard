@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="">
         <ReactQueryProvider>
-          <div className="lg:block">
+          <div className="lg:hidden sticky top-0 z-20">
             <DrawerMenu />
           </div>
           <div className="hidden lg:block sticky top-0 z-10">
