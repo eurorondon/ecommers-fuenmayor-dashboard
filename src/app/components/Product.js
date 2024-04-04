@@ -4,7 +4,9 @@ import Link from "next/link";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 const Product = (props) => {
-  const { product, handleDelete } = props;
+  const { product, url, handleDelete } = props;
+
+  console.log("esto es foto", url);
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md">
@@ -17,12 +19,9 @@ const Product = (props) => {
         <div className="bg-white">
           <Link href={`/product/${product?.id}/edit`}>
             <div className="w-full">
-              {product &&
-              product.photo &&
-              product.photo[0] &&
-              product.photo[0].url ? (
+              {url ? (
                 <img
-                  src={product.photo[0].url}
+                  src={url}
                   alt="Product"
                   width={"100%"}
                   // height={"180px"}
@@ -40,7 +39,7 @@ const Product = (props) => {
                 // <h1>hola</h1>
                 // <h1>{product.photo[0].url}</h1>
                 // <h1>sin imagen</h1>
-                <Image
+                <img
                   src={
                     "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
                   }
