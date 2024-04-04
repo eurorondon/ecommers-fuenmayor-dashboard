@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { useQuery } from "react-query";
 
-function page() {
+function Page() {
   const { data } = useQuery("AllCategories", getAllCategories);
 
   console.log(data);
@@ -54,4 +54,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

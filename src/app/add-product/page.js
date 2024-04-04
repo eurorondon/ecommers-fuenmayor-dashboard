@@ -1,8 +1,8 @@
 import React from "react";
 import UpdateProduct from "../components/UpdateProduct";
 
-function page() {
+function Page() {
   return <UpdateProduct />;
 }
 
-export default page;
+export default Page;
