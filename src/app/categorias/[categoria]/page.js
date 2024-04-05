@@ -6,15 +6,50 @@ import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import amplifyconfig from "@/aws-exports";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useInfiniteQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import Product from "@/app/components/Product";
+import { deleteProductFunction } from "@/utils/graphqlFunctions";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
 
 function Page() {
   const queryClient = useQueryClient();
+
   const { categoria } = useParams();
+
+  //DELETE PRODUCT WITH REACT QUERY
+  const { mutate } = useMutation(deleteProductFunction, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`infinity-products-${categoria}`);
+    },
+  });
+
+  const handleDelete = async (id, photo) => {
+    const publicId = photo.map((item) => item.publicId);
+
+    const userConfirmed = window.confirm("¿Seguro de Eliminar este Producto?");
+    if (userConfirmed) {
+      try {
+        const response = await fetch(`/api/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ publicId: publicId }),
+        });
+        // console.log(response);
+      } catch (error) {
+        console.error("Error de red al eliminar la imagen desde page", error);
+      }
+      try {
+        mutate(id);
+        queryClient.invalidateQueries(`infinity-products-${categoria}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   console.log(categoria);
   const { data, isLoading, hasNextPage, fetchNextPage, refetch, isFetching } =
@@ -102,7 +137,7 @@ function Page() {
                   offer={product.inOffer}
                   discountPercentage={product.discountPercentage}
                   photo={product.photo}
-                  // handleDelete={handleDelete}
+                  handleDelete={handleDelete}
                 />
               </div>
             </div>

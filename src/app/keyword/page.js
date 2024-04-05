@@ -5,9 +5,10 @@ import { listProducts } from "@/graphql/queries";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import amplifyconfig from "@/aws-exports";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import Product from "../components/Product";
+import { deleteProductFunction } from "@/utils/graphqlFunctions";
 
 function Page() {
   const searchParams = useSearchParams();
@@ -16,6 +17,7 @@ function Page() {
   const search = searchParams.get("search");
 
   console.log(search);
+  const queryClient = useQueryClient();
 
   const { data, refetch } = useQuery(
     `Keyword`,
@@ -40,6 +42,40 @@ function Page() {
       enabled: false, // disable the query by default
     }
   );
+
+  //DELETE PRODUCT WITH REACT QUERY
+  const { mutate } = useMutation(deleteProductFunction, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`Keyword`);
+      refetch();
+    },
+  });
+
+  const handleDelete = async (id, photo) => {
+    const publicId = photo.map((item) => item.publicId);
+
+    const userConfirmed = window.confirm("¿Seguro de Eliminar este Producto?");
+    if (userConfirmed) {
+      try {
+        const response = await fetch(`/api/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ publicId: publicId }),
+        });
+        // console.log(response);
+      } catch (error) {
+        console.error("Error de red al eliminar la imagen desde page", error);
+      }
+      try {
+        mutate(id);
+        queryClient.invalidateQueries(`Keyword`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   React.useEffect(() => {
     refetch({ search }); // refetch with the new search value
@@ -73,7 +109,7 @@ function Page() {
                   offer={product.inOffer}
                   discountPercentage={product.discountPercentage}
                   photo={product.photo}
-                  // handleDelete={handleDelete}
+                  handleDelete={handleDelete}
                 />
               </div>
             </div>

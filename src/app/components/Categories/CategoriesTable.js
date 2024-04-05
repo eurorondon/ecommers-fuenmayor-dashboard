@@ -17,37 +17,44 @@ const CategoriesTable = ({ setEditID }) => {
   const { data } = useQuery("AllCategories", getAllCategories);
   const queryClient = useQueryClient();
 
-  console.log(data);
-
   //DELETE PRODUCT WITH REACT QUERY
-  const { mutate } = useMutation(deleteCategory, {
+  const { mutate, isSuccess } = useMutation(deleteCategory, {
     onSuccess: () => {
       queryClient.invalidateQueries("AllCategories");
+      alert("Categoria Eliminada");
     },
   });
 
   const deletehandler = async (id) => {
     const filter = data.filter((item) => item.id === id);
-    if (filter) {
-      console.log(filter?.id);
-      const publicId = filter[0].photo[0].publicId;
-    }
-    if (window.confirm("¿Eliminar Categoria?")) {
-      try {
-        console.log(filter[0].photo.publicId);
-        const response = await fetch(`/api/delete`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ publicId: [filter[0].photo[0].publicId] }),
-        });
+    const categoriaFiltrada = filter[0];
 
-        console.log("Imagen Borrada", response);
-      } catch (error) {
-        console.error("Error de red al eliminar la imagen desde page", error);
+    if (categoriaFiltrada && window.confirm("¿Eliminar Categoria?")) {
+      if (categoriaFiltrada.photo) {
+        try {
+          console.log(filter[0].photo.publicId);
+          const response = await fetch(`/api/delete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ publicId: [filter[0].photo[0].publicId] }),
+          });
+
+          console.log("Imagen Borrada", response);
+          mutate(id);
+        } catch (error) {
+          console.error("Error de red al eliminar la imagen desde page", error);
+        }
+      } else {
+        mutate(id);
       }
-      mutate(id);
+
+      // if (window.confirm("¿Eliminar Categoria?")) {
+
+      // } else {
+
+      // }
     }
   };
 
