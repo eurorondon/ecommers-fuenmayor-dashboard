@@ -14,62 +14,34 @@ const Product = (props) => {
         style={{ padding: "5px" }}
       >
         {/* <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm h-80 relative overflow-hidden"> */}
-        <div className="bg-white">
+        <div style={{ width: "100%", height: "auto", position: "relative" }}>
           <Link href={`/product/${id}/edit`}>
-            <div className="w-full">
-              {url ? (
-                <img
-                  src={url}
-                  alt="Product"
-                  width={"100%"}
-                  // height={"180px"}
-                  className="rounded-t-md "
-                  style={{
-                    width: "100%",
-                    // height: "150px",
-                    objectFit: "scale-down",
-                    borderTopLeftRadius: "5px",
-                    borderTopRightRadius: "5px",
-                  }}
-                />
-              ) : (
-                // <span>.</span>
-                // <h1>hola</h1>
-                // <h1>{product.photo[0].url}</h1>
-                // <h1>sin imagen</h1>
-                <img
-                  src={
-                    "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
-                  }
-                  // width={200}
-                  // height={200}
-                  alt="Product"
-                  className="rounded-md"
-                />
-              )}
-            </div>
+            {url ? (
+              <Image
+                src={url}
+                alt="Product"
+                width={180} // Anchura específica de la imagen
+                height={180} // Altura específica de la imagen
+                layout="responsive" // Establecer diseño responsivo
+                objectFit="scale-down" // Ajustar el contenido de la imagen al contenedor
+                placeholder="blur"
+                blurDataURL="/images/loadingImages.png"
+              />
+            ) : (
+              <Image
+                src={
+                  "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
+                }
+                alt="Product"
+                width={180} // Anchura específica de la imagen
+                height={180} // Altura específica de la imagen
+                layout="responsive" // Establecer diseño responsivo
+                objectFit="scale-down" // Ajustar el contenido de la imagen al contenedor
+                placeholder="blur"
+                blurDataURL="/images/loadingImages.png"
+              />
+            )}
           </Link>
-
-          {/* <div className="info-wrap">
-            <Link href="#" className="title text-truncate">
-              {product?.name}
-            </Link>
-            <div className="price mb-2">${product?.price}</div>
-            <div className="absolute bottom-2">
-              <Link
-                href={`/product/${product?.id}/edit`}
-                className="bg-green-500 mr-2 text-white px-4 py-2 rounded-md hover:bg-green-600 p-2 pb-3 col-span-6 md:col-span-3"
-              >
-                <i className="fas fa-pen">Edit</i>
-              </Link>
-              <button
-                onClick={() => handleDelete(product.id, product.photo)}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 p-2 pb-3 col-span-6 md:col-span-3"
-              >
-                <i className="fas fa-trash-alt">Delete</i>
-              </button>
-            </div>
-          </div> */}
           <div className="p-2" style={{ backgroundColor: "" }}>
             <h5
               className="name"
