@@ -122,8 +122,8 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   return (
-    <div className=" flex-row h-screen flex justify-center items-center ">
-      <div className="">
+    <div className=" flex justify-center py-5  ">
+      <div className="bg-white p-5 border rounded-lg shadow-lg ">
         <div className="card  ">
           <div className="card-body">
             <div className="">

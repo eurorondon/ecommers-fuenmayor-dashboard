@@ -8,25 +8,25 @@ const MainCategories = () => {
   const [editID, setEditID] = React.useState("");
   console.log(editID);
   return (
-    <section className="content-main">
-      <div className="content-header">
-        <h2 className="content-title"></h2>
-      </div>
+    <section className="mt-8">
       {/* {loading ? (
         <h1 className="text-danger">Cargando</h1>
       ) :  */}
-      (
-      <div className="card shadow-sm">
-        <div className="card-body">
-          <div className="row">
-            <CreateCategory editID={editID} setEditID={setEditID} />
 
-            <CategoriesTable setEditID={setEditID} />
-          </div>
-          {/* <h1 className="text-danger">{loading}</h1> */}
+      <div
+        className="lg:p-10 grid-cols-1 md:grid-cols-8 lg:grid-cols-8"
+        style={{
+          display: "grid",
+          gap: "2rem",
+        }}
+      >
+        <div className="  md:col-span-4 lg:col-span-4 xl:col-span-5 order-last md:order-first">
+          <CategoriesTable setEditID={setEditID} />
+        </div>
+        <div className=" m-5 md:col-span-4 lg:col-span-4 xl:col-span-3 ">
+          <CreateCategory editID={editID} setEditID={setEditID} />
         </div>
       </div>
-      )
     </section>
   );
 };

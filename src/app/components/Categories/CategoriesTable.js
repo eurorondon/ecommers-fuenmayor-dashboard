@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import amplifyconfig from "@/aws-exports";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteCategory, getAllCategories } from "@/utils/graphqlFunctions";
 import Link from "next/link";
 import Image from "next/image";
+import { Table } from "flowbite-react";
 
 Amplify.configure(amplifyconfig);
 
@@ -17,7 +17,6 @@ const CategoriesTable = ({ setEditID }) => {
   const { data } = useQuery("AllCategories", getAllCategories);
   const queryClient = useQueryClient();
 
-  //DELETE PRODUCT WITH REACT QUERY
   const { mutate, isSuccess } = useMutation(deleteCategory, {
     onSuccess: () => {
       queryClient.invalidateQueries("AllCategories");
@@ -49,91 +48,65 @@ const CategoriesTable = ({ setEditID }) => {
       } else {
         mutate(id);
       }
-
-      // if (window.confirm("¿Eliminar Categoria?")) {
-
-      // } else {
-
-      // }
     }
   };
 
   const edithandler = (id) => {
     setEditID(id);
-    // queryClient.invalidateQueries("GetCategory");
   };
 
   return (
-    <div className="col-md-12 col-lg-8 " style={{ color: "black" }}>
-      <table className="table ">
-        <thead className="">
-          <tr>
-            <th></th>
-            <th>Imagen</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th className="text-end">Action</th>
-          </tr>
-        </thead>
-        {/* Table Data */}
-        <tbody>
-          {data?.map((category) => (
-            <tr key={category.id}>
-              <td>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
+    <>
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Imagen</Table.HeadCell>
+            <Table.HeadCell>Name</Table.HeadCell>
+            {/* <Table.HeadCell>Description</Table.HeadCell> */}
+            <Table.HeadCell>Action</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {data?.map((category) => (
+              <Table.Row key={category.id}>
+                <Table.Cell>
+                  <Image
+                    src={
+                      category &&
+                      category.photo &&
+                      category.photo[0] &&
+                      category.photo[0].url
+                        ? category.photo[0].url
+                        : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
+                    }
+                    alt="img"
+                    width={120}
+                    height={120}
                   />
-                </div>
-              </td>
-
-              <td>
-                <Image
-                  src={
-                    category &&
-                    category.photo &&
-                    category.photo[0] &&
-                    category.photo[0].url
-                      ? category.photo[0].url
-                      : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
-                  }
-                  alt="img"
-                  width={120}
-                  height={120}
-                />
-              </td>
-
-              <td>
-                <b>{category.categoryName}</b>
-              </td>
-              <td>{category.description}</td>
-              <td className=" ">
-                <div className="flex justify-content-end gap-2">
-                  <div className=" ">
-                    <button
-                      onClick={() => deletehandler(category.id)}
-                      className="btn btn-danger "
-                    >
-                      <MdDelete size={24} />
-                    </button>
-                  </div>
-                  <div className="">
-                    <button
-                      onClick={() => edithandler(category.id)}
-                      className="btn btn-success "
-                    >
-                      <FaEdit size={24} />
-                    </button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                </Table.Cell>
+                <Table.Cell>
+                  <b>{category.categoryName}</b>
+                </Table.Cell>
+                {/* <Table.Cell>{category.description}</Table.Cell> */}
+                <Table.Cell className="flex justify-end gap-2">
+                  <button
+                    onClick={() => deletehandler(category.id)}
+                    className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md"
+                  >
+                    <MdDelete size={24} />
+                  </button>
+                  <button
+                    onClick={() => edithandler(category.id)}
+                    className="btn btn-success bg-green-500 text-white py-1 px-2 rounded-md"
+                  >
+                    <FaEdit size={24} />
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
+    </>
   );
 };
 

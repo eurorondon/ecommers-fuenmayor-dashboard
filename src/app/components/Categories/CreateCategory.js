@@ -260,60 +260,74 @@ const CreateCategory = ({ editID, setEditID }) => {
   };
 
   return (
-    <div className="col-md-12 col-lg-4">
-      <form onSubmit={editID ? handleUpdate : submitHandler}>
-        <div className="mb-4">
-          <label htmlFor="product_name" className="form-label">
-            Name
-          </label>
-          <input
-            type="text"
-            placeholder="Type here"
-            className="form-control py-3"
-            id="product_name"
-            value={categoryName}
-            onChange={handleCategoryNameChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="form-label">Description</label>
-          <textarea
-            placeholder="Type here"
-            className="form-control"
-            rows="4"
-            value={description}
-            onChange={handleDescripcionChange}
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <input
-            ref={inputFileRef}
-            className=" bg-amber-300 rounded-md"
-            multiple
-            type="file"
-            onChange={(e) => {
-              setFile(e.target.files[0]);
-            }}
-          />
-        </div>
+    <div className="">
+      <div className="bg-white p-5 border rounded-lg shadow-lg ">
+        <form onSubmit={editID ? handleUpdate : submitHandler}>
+          <div className="">
+            <label
+              htmlFor="product_title"
+              className="block   text-sm font-bold mt-2"
+            >
+              Nombre de Categoria
+            </label>
+            <input
+              type="text"
+              placeholder="Escribir aqui"
+              className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+              id="product_name"
+              required
+              value={categoryName}
+              onChange={handleCategoryNameChange}
+            />
+          </div>
 
-        <div className="d-grid">
-          <button className="btn btn-primary py-3 ">
-            {editItem ? "Update category" : "Create Category"}
-          </button>
-          {editItem && (
-            <div className="mt-3 text-primary" style={{ textAlign: "center" }}>
-              <button
-                onClick={() => {
-                  setEditID(null);
-                }}
+          <div className="mb-4">
+            <label className="block   text-sm font-bold mt-2">
+              Descripcion
+            </label>
+            <textarea
+              placeholder="Escribir aqui"
+              className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+              rows="2"
+              // required
+              value={description}
+              onChange={handleDescripcionChange}
+            ></textarea>
+          </div>
+
+          <div className="mb-4">
+            <input
+              ref={inputFileRef}
+              className=" bg-gray-100 rounded-md"
+              multiple
+              type="file"
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+              }}
+            />
+          </div>
+
+          <div className="">
+            <button className="bg-green-500 text-white px-5 py-2 rounded-md ">
+              {editItem ? "Update category" : "Create Category"}
+            </button>
+            {editItem && (
+              <div
+                className="mt-3 text-primary"
+                style={{ textAlign: "center" }}
               >
-                New Category
-              </button>
-            </div>
-          )}
-        </div>
-      </form>
+                <button
+                  onClick={() => {
+                    setEditID(null);
+                  }}
+                >
+                  New Category
+                </button>
+              </div>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
