@@ -44,6 +44,7 @@ export async function POST(request) {
           .upload(fileUri, {
             folder: "Next.js",
             invalidate: true,
+            quality: 0.1,
           })
           .then((result) => {
             console.log(result);
