@@ -45,6 +45,7 @@ export async function POST(request) {
             folder: "Next.js",
             invalidate: true,
             quality: 0.1,
+            base64: true,
           })
           .then((result) => {
             console.log(result);
