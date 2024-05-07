@@ -6,6 +6,26 @@ import { MdDelete, MdEdit } from "react-icons/md";
 const Product = (props) => {
   const { product, url, handleDelete, id, photo } = props;
 
+  // console.log(url);
+
+  // function agregarTransformacion(url) {
+  //   const uploadIndex = url.indexOf("/upload/");
+  //   if (uploadIndex !== -1) {
+  //     const transformedUrl =
+  //       url.slice(0, uploadIndex + "/upload/".length) +
+  //       "q_auto:low/" +
+  //       url.slice(uploadIndex + "/upload/".length);
+  //     return transformedUrl;
+  //   } else {
+  //     console.log("La URL no contiene '/upload/'");
+  //     return url;
+  //   }
+  // }
+
+  // const urlOriginal = url;
+  // const urlTransformada = agregarTransformacion(urlOriginal);
+  // console.log(urlTransformada);
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md">
       {/* <div className=" flex flex-col justify-center items-center z-0"> */}

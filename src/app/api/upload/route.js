@@ -44,8 +44,9 @@ export async function POST(request) {
           .upload(fileUri, {
             folder: "Next.js",
             invalidate: true,
-            quality: 0.1,
-            base64: true,
+            // quality_analysis: true,
+
+            // base64: true,
           })
           .then((result) => {
             console.log(result);
