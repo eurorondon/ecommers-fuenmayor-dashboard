@@ -45,6 +45,7 @@ export async function newProduct({
         inOffer,
         discountPercentage,
         bestSellers,
+        type: "Producto",
       },
     },
   });

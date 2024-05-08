@@ -30,6 +30,7 @@ export const createProduct = /* GraphQL */ `
       price
       countInStock
       createdAt
+      type
       updatedAt
       inOffer
       discountPercentage
@@ -68,6 +69,7 @@ export const updateProduct = /* GraphQL */ `
       price
       countInStock
       createdAt
+      type
       updatedAt
       inOffer
       discountPercentage
@@ -106,6 +108,7 @@ export const deleteProduct = /* GraphQL */ `
       price
       countInStock
       createdAt
+      type
       updatedAt
       inOffer
       discountPercentage
@@ -125,8 +128,8 @@ export const createCategories = /* GraphQL */ `
       categoryName
       description
       photo {
-        publicId
         url
+        publicId
       }
       createdAt
       updatedAt
@@ -146,6 +149,7 @@ export const updateCategories = /* GraphQL */ `
       photo {
         publicId
         url
+        __typename
       }
       createdAt
       updatedAt
@@ -165,6 +169,7 @@ export const deleteCategories = /* GraphQL */ `
       photo {
         publicId
         url
+        __typename
       }
       createdAt
       updatedAt
