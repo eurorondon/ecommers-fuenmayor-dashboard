@@ -26,6 +26,8 @@ const Product = (props) => {
   // const urlTransformada = agregarTransformacion(urlOriginal);
   // console.log(urlTransformada);
 
+  const MAX_DESCRIPTION_LENGTH = 100;
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md">
       {/* <div className=" flex flex-col justify-center items-center z-0"> */}
