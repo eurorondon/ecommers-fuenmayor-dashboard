@@ -20,13 +20,13 @@ function Page() {
   const queryClient = useQueryClient();
 
   const { data, refetch } = useQuery(
-    `Keyword`,
+    [`Keywords`],
     async () => {
       try {
         const res = await client.graphql({
           query: listProducts,
           variables: {
-            // limit: 10,
+            limit: 200,
             filter: { name: { contains: search } },
             // nextToken: pageParam,
           },

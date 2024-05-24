@@ -5,6 +5,7 @@ import Product from "./components/Product";
 import SidebarUi from "./components/Sidebar";
 import FlowNavbar from "./components/FlowNavbar";
 import DrawerMenu from "./components/DrawerMenu";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 

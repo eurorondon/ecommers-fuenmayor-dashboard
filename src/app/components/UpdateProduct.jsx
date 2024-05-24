@@ -11,6 +11,7 @@ import {
 import SwitchOffer from "./SwitchOffer";
 import SwitchSellers from "./SwitchOffer";
 import { handleDeleteImage, handleSubmit, handleUpdate } from "./querys";
+import { CircularProgress } from "@mui/material";
 
 function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
@@ -61,8 +62,10 @@ function UpdateProduct({ hasEdit, productId }) {
     mutate,
     data: dataMutation,
     status: statusMutation,
+    isLoading: loading,
   } = useMutation(newProduct, {
     onSuccess: () => {
+      setIsLoading(false);
       setName(""), setPrice(""), router.push("/productos");
     },
   });
@@ -71,6 +74,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
   const handleClickForm = () => {
+    setIsLoading(true);
     handleSubmit(
       name,
       price,
@@ -120,6 +124,8 @@ function UpdateProduct({ hasEdit, productId }) {
       queryClient
     );
   };
+
+  console.log(isLoading);
 
   return (
     <div className=" flex justify-center py-5  ">
@@ -283,36 +289,33 @@ function UpdateProduct({ hasEdit, productId }) {
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
-            {isLoading ? (
-              <h1 className="text-6xl">Cargando</h1>
-            ) : (
-              <div className="flex">
-                {imageUrl &&
-                  imageUrl.map((item) => (
-                    <div
-                      className="relative"
-                      key={item?.publicId}
-                      onClick={() => console.log(item?.publicId)}
-                    >
-                      <div className="bg-red-600 absolute right-2  font-extrabold text-white z-10 rounded-full w-5 h-5 flex justify-center items-center">
-                        <button
-                          className=" "
-                          onClick={() => handleClickDeleteImage(item?.publicId)}
-                        >
-                          X
-                        </button>
-                      </div>
 
-                      <Image
-                        src={item.url}
-                        width={150}
-                        height={150}
-                        alt="Imagen"
-                      />
+            <div className="flex">
+              {imageUrl &&
+                imageUrl.map((item) => (
+                  <div
+                    className="relative"
+                    key={item?.publicId}
+                    onClick={() => console.log(item?.publicId)}
+                  >
+                    <div className="bg-red-600 absolute right-2  font-extrabold text-white z-10 rounded-full w-5 h-5 flex justify-center items-center">
+                      <button
+                        className=" "
+                        onClick={() => handleClickDeleteImage(item?.publicId)}
+                      >
+                        X
+                      </button>
                     </div>
-                  ))}
-              </div>
-            )}
+
+                    <Image
+                      src={item.url}
+                      width={150}
+                      height={150}
+                      alt="Imagen"
+                    />
+                  </div>
+                ))}
+            </div>
 
             <div className="mb-4">
               <input
@@ -325,11 +328,20 @@ function UpdateProduct({ hasEdit, productId }) {
                 }}
               />
             </div>
+
             <button
-              className="bg-slate-950 text-white px-5 py-2 rounded-md"
+              disabled={isLoading && true}
+              className="bg-slate-950 text-white px-5 py-2 rounded-md flex justify-center items-center"
               onClick={hasEdit ? handleClickUpdate : handleClickForm}
+              style={{ minWidth: 100 }}
             >
-              {hasEdit ? "Update" : "Create"}
+              {isLoading ? (
+                <CircularProgress size={20} style={{ color: "white" }} />
+              ) : hasEdit ? (
+                "Update"
+              ) : (
+                "Create"
+              )}
             </button>
           </div>
         </div>
