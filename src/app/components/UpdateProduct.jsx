@@ -63,6 +63,8 @@ function UpdateProduct({ hasEdit, productId }) {
     data: dataMutation,
     status: statusMutation,
     isLoading: loading,
+    isError,
+    error: errorMutate,
   } = useMutation(newProduct, {
     onSuccess: () => {
       setIsLoading(false);
@@ -346,6 +348,7 @@ function UpdateProduct({ hasEdit, productId }) {
           </div>
         </div>
       </div>
+      {isError && alert(errorMutate)}
     </div>
   );
 }
