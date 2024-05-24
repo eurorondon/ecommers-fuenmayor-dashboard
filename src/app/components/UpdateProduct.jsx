@@ -92,12 +92,10 @@ function UpdateProduct({ hasEdit, productId }) {
         mutate
       );
       // Si handleSubmit tiene un manejo de éxito interno y no arroja un error, entonces puedes continuar aquí después de que se complete.
-      alert("La operación se completó con éxito");
+      alert("Producto publicado con Exito");
     } catch (error) {
       setIsLoading(false);
-      alert(
-        "Error en handleClickForm: " + (error.message || "Error desconocido")
-      );
+      alert("Error" + (error.message || "Error desconocido"));
       console.log(error);
     }
   };
