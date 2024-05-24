@@ -19,41 +19,136 @@ export const handleSubmit = async (
   file,
   mutate
 ) => {
-  console.log("esto es price", price);
   let photo = [];
-  if (file) {
-    if (file.length > 0) {
-      for (let i = 0; i < file.length; i++) {
-        const formData = new FormData();
-        formData.append("file", file[i]);
+  try {
+    if (file) {
+      if (file.length > 0) {
+        for (let i = 0; i < file.length; i++) {
+          const formData = new FormData();
+          formData.append("file", file[i]);
 
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await response.json();
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
 
-        photo.push({
-          url: data.data.url,
-          publicId: data.data.public_id,
-        });
-        console.log(photo);
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.err || "Upload failed");
+          }
+
+          const data = await response.json();
+
+          photo.push({
+            url: data.data.url,
+            publicId: data.data.public_id,
+          });
+          console.log(photo);
+        }
       }
     }
-  }
 
-  mutate({
-    name,
-    price,
-    countInStock,
-    categories: [category],
-    photo,
-    description: description,
-    inOffer: toggle,
-    discountPercentage,
-    bestSellers,
-  });
+    mutate(
+      {
+        name,
+        price,
+        countInStock,
+        categories: [category],
+        photo,
+        description: description,
+        inOffer: toggle,
+        discountPercentage,
+        bestSellers,
+      },
+      // {
+      //   onCompleted: () => {
+      //     Router.push("/productos");
+      //   },
+      // },
+      {
+        onError: (error) => {
+          throw new Error(error.message || "Upload failed");
+          // alert(error.message || "Error updating product");
+        },
+      }
+    );
+  } catch (error) {
+    throw new Error(error.message || "Upload failed");
+  }
 };
+
+// export const handleSubmit = async (
+//   name,
+//   price,
+//   countInStock,
+//   category,
+//   description,
+//   toggle,
+//   discountPercentage,
+//   bestSellers,
+//   file,
+//   mutate
+// ) => {
+//   console.log("esto es price", price);
+//   let photo = [];
+
+//   try {
+//     if (file) {
+//       if (file.length > 0) {
+//         for (let i = 0; i < file.length; i++) {
+//           const formData = new FormData();
+//           formData.append("file", file[i]);
+
+//           const response = await fetch("/api/upload", {
+//             method: "POST",
+//             body: formData,
+//           });
+
+//           if (!response.ok) {
+//             const errorData = await response.json();
+//             throw new Error(errorData.err || "Upload failed");
+//           }
+
+//           const data = await response.json();
+
+//           photo.push({
+//             url: data.data.url,
+//             publicId: data.data.public_id,
+//           });
+//           console.log(photo);
+//         }
+//       }
+//     }
+
+//     // Resto de la lógica de submit
+//     // Asume que el mutate también maneja errores
+//     mutate({
+//       variables: {
+//         input: {
+//           name,
+//           price,
+//           countInStock,
+//           category,
+//           description,
+//           toggle,
+//           discountPercentage,
+//           bestSellers,
+//           photo,
+//         },
+//       },
+//   onCompleted: () => {
+//     Router.push("/productos");
+//   },
+//   onError: (error) => {
+//     console.error("Error updating product:", error);
+//     alert(error.message || "Error updating product");
+//   },
+// });
+//   } catch (error) {
+//     console.error("Error during submission:", error);
+//     alert(error.message || "An error occurred during submission");
+//   }
+// };
 
 export const handleUpdate = async (
   name,

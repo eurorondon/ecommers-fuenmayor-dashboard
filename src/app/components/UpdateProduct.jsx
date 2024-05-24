@@ -76,20 +76,30 @@ function UpdateProduct({ hasEdit, productId }) {
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
-  const handleClickForm = () => {
+  const handleClickForm = async () => {
     setIsLoading(true);
-    handleSubmit(
-      name,
-      price,
-      countInStock,
-      category,
-      description,
-      toggle,
-      discountPercentage,
-      bestSellers,
-      file,
-      mutate
-    );
+    try {
+      await handleSubmit(
+        name,
+        price,
+        countInStock,
+        category,
+        description,
+        toggle,
+        discountPercentage,
+        bestSellers,
+        file,
+        mutate
+      );
+      // Si handleSubmit tiene un manejo de éxito interno y no arroja un error, entonces puedes continuar aquí después de que se complete.
+      alert("La operación se completó con éxito");
+    } catch (error) {
+      setIsLoading(false);
+      alert(
+        "Error en handleClickForm: " + (error.message || "Error desconocido")
+      );
+      console.log(error);
+    }
   };
 
   const handleClickUpdate = () => {
@@ -128,14 +138,14 @@ function UpdateProduct({ hasEdit, productId }) {
     );
   };
 
-  React.useEffect(() => {
-    if (isSuccess) {
-      setIsLoading(false);
-    }
-    if (isError) {
-      setIsLoading(false);
-    }
-  }, [isSuccess, isError]);
+  // React.useEffect(() => {
+  //   if (isSuccess) {
+  //     setIsLoading(false);
+  //   }
+  //   if (isError) {
+  //     setIsLoading(false);
+  //   }
+  // }, [isSuccess, isError]);
 
   console.log(isLoadingMutate, isSuccess);
 
