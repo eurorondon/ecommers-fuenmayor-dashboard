@@ -62,7 +62,8 @@ function UpdateProduct({ hasEdit, productId }) {
     mutate,
     data: dataMutation,
     status: statusMutation,
-    isLoading: loading,
+    isLoading: isLoadingMutate,
+    isSuccess,
     isError,
     error: errorMutate,
   } = useMutation(newProduct, {
@@ -127,7 +128,16 @@ function UpdateProduct({ hasEdit, productId }) {
     );
   };
 
-  console.log(isLoading);
+  React.useEffect(() => {
+    if (isSuccess) {
+      setIsLoading(false);
+    }
+    if (isError) {
+      setIsLoading(false);
+    }
+  }, [isSuccess, isError]);
+
+  console.log(isLoadingMutate, isSuccess);
 
   return (
     <div className=" flex justify-center py-5  ">
