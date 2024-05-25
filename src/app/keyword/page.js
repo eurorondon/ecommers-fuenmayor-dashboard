@@ -174,7 +174,7 @@ function Page() {
                 </Table.Cell>
                 <Table.Cell className="flex   justify-center  gap-2">
                   <button
-                    onClick={() => handleDelete(product.id)}
+                    onClick={() => handleDelete(product.id, product.photo)}
                     className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md"
                   >
                     <MdDelete size={24} />
