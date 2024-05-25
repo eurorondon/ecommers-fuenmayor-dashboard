@@ -48,6 +48,7 @@ const Product = (props) => {
                 objectFit="scale-down" // Ajustar el contenido de la imagen al contenedor
                 placeholder="blur"
                 blurDataURL="/images/loadingImages.png"
+                loading="lazy"
               />
             ) : (
               <Image
