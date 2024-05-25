@@ -172,9 +172,12 @@ function Productos() {
             {products?.map((product) => (
               <Table.Row
                 key={product.id}
-                className="flex justify-between items-center"
+                className="flex justify-between relative items-center pt-10"
               >
                 <Table.Cell>
+                  <span className="absolute top-3 text-lg font-semibold">
+                    {[product.name]}
+                  </span>
                   <Image
                     src={
                       product &&
@@ -189,12 +192,10 @@ function Productos() {
                     height={120}
                   />
                 </Table.Cell>
-                <Table.Cell>
-                  <b>{product.name}</b>
-                  <br />
+                <Table.Cell className="font-extrabold">
                   {product.price} $
                 </Table.Cell>
-                <Table.Cell className="flex flex-col  justify-center  gap-2">
+                <Table.Cell className="flex   justify-center  gap-2">
                   <button
                     onClick={() => deletehandler(category.id)}
                     className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md"
