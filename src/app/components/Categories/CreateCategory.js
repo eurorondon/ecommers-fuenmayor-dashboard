@@ -9,6 +9,8 @@ import {
   getAllCategories,
   newCategory,
 } from "@/utils/graphqlFunctions";
+import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 // import { createCategory } from "../../Redux/Actions/CategoryActions";
 // import { useDispatch, useSelector } from "react-redux";
 // import { CATEGORY_CREATE_RESET } from "../../Redux/Constants/CategoryConstants";
@@ -31,6 +33,7 @@ const CreateCategory = ({ editID, setEditID }) => {
   const [file, setFile] = useState(null);
   const [editItem, setEditItem] = useState("");
   const inputFileRef = React.useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data } = useQuery("AllCategories", getAllCategories);
 
@@ -39,23 +42,14 @@ const CreateCategory = ({ editID, setEditID }) => {
       const resFilter = data?.filter((item) => item.id === editID);
 
       setEditItem(resFilter[0]);
-      console.log("Filtrado", resFilter);
     }
   }, [editID, data]);
-  // if (editItem) {
-  //   console.log(editItem);
-  // }
-
-  useEffect(() => {
-    console.log(file);
-  }, [setFile, file]);
 
   const client = generateClient();
 
   const queryClient = useQueryClient();
   React.useEffect(() => {
     if (editItem) {
-      console.log(editItem);
       setCategoryName(editItem.categoryName);
       setDescription(editItem.description);
     }
@@ -88,44 +82,116 @@ const CreateCategory = ({ editID, setEditID }) => {
   //   }
   // );
 
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   try {
+  //     let photo = [];
+
+  //     if (file) {
+  //       try {
+  //         const formData = new FormData();
+  //         formData.append("file", file);
+
+  //         const response = await fetch("/api/upload", {
+  //           method: "POST",
+  //           body: formData,
+  //         });
+
+  //         if (!response.ok) {
+  //           const errorData = await response.json();
+  //           throw new Error(errorData.err || "Upload failed");
+  //         }
+  //         const data = await response.json();
+  //         photo.push({
+  //           url: data?.data?.url,
+  //           publicId: data?.data?.public_id,
+  //         });
+  //       } catch (error) {
+  //         console.log(error);
+  //         toast.error("Error");
+  //         return;
+  //       }
+
+  //       if (data) {
+  //         mutate({
+  //           categoryName,
+  //           photo,
+  //           description,
+  //         });
+  //       } else {
+  //         console.log("no existe data");
+  //       }
+  //     } else {
+  //       mutate({
+  //         categoryName,
+  //         description,
+  //       });
+  //     }
+
+  //     setFile(null);
+  //     inputFileRef.current.value = "";
+
+  //     setDescription(""), setCategoryName("");
+  //     setIsLoading(false);
+  //     toast.success("categoria creada");
+  //   } catch (error) {
+  //     toast.error("Error al crear categoria");
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    let photo = [];
+    setIsLoading(true);
+    try {
+      let photo = [];
 
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+      if (file) {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      photo.push({
-        url: data?.data?.url,
-        publicId: data?.data?.public_id,
-      });
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
 
-      if (data) {
-        mutate({
-          categoryName,
-          photo,
-          description,
-        });
-      } else {
-        console.log("no existe data");
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.err || "Upload failed");
+          }
+          const data = await response.json();
+          photo.push({
+            url: data.data.url,
+            publicId: data.data.publicId,
+          });
+        } catch (error) {
+          console.log(error);
+          toast.error("Error al subir la imagen");
+          setIsLoading(false); // Añade esto para parar la carga
+          return; // Esto detiene la ejecución aquí si hay un error
+        }
       }
-    } else {
+
+      // Mueve la lógica de `mutate` fuera del bloque `try-catch` interior
       mutate({
         categoryName,
+        photo: file ? photo : undefined,
         description,
       });
+
+      // Restablecer los campos y estado
+      setFile(null);
+      inputFileRef.current.value = "";
+      setDescription("");
+      setCategoryName("");
+      setIsLoading(false);
+      toast.success("Categoría creada con éxito");
+    } catch (error) {
+      toast.error("Error al crear categoría");
+      setIsLoading(false);
     }
-
-    setFile(null);
-    inputFileRef.current.value = "";
-
-    setDescription(""), setCategoryName("");
   };
 
   const handleCategoryNameChange = (e) => {
@@ -151,23 +217,29 @@ const CreateCategory = ({ editID, setEditID }) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     let photo = [];
 
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      console.log(data);
-      photo.push({
-        url: data?.data?.url,
-        publicId: data?.data?.public_id,
-      });
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+
+        photo.push({
+          url: data?.data?.url,
+          publicId: data?.data?.publicId,
+        });
+      } catch (error) {
+        alert("error al subir nueva imagen");
+        return;
+      }
 
       try {
         const result = await client.graphql({
@@ -181,62 +253,10 @@ const CreateCategory = ({ editID, setEditID }) => {
             },
           },
         });
-
-        //  let id =  (editItem.photo[0].publicId);
-        try {
-          const response = await fetch(`/api/delete`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ publicId: [editItem.photo[0].publicId] }),
-          });
-
-          console.log("Imagen Borrada", response);
-        } catch (error) {
-          console.error("Error de red al eliminar la imagen desde page", error);
-        }
       } catch (error) {
         console.log(error);
+        toast.warn("Error al actualizar categoria");
       }
-
-      // if (data) {
-      //   console.log("a ver que trae data", data.photo.publicId);
-      //   try {
-      //     const result = await client.graphql({
-      //       query: updateCategories,
-      //       variables: {
-      //         input: {
-      //           id: editItem.id,
-      //           categoryName,
-      //           photo,
-      //           description,
-      //         },
-      //       },
-      //     });
-      // try {
-      //   console.log("a ver que trae data", data.photo.publicId);
-      //   // const response = await fetch(`/api/delete`, {
-      //   //   method: "POST",
-      //   //   headers: {
-      //   //     "Content-Type": "application/json",
-      //   //   },
-      //   //   body: JSON.stringify({ publicId: [data.photo.publicId] }),
-      //   // });
-      // } catch (error) {
-      //   console.error(
-      //     "Error de red al eliminar la imagen desde page",
-      //     error
-      //   );
-      // }
-      //     // console.log(result);
-
-      //     // setName(""), setPrice(""), console.log(res);
-      //     // router.push("/productos");
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // }
     }
 
     const result = await client.graphql({
@@ -249,7 +269,23 @@ const CreateCategory = ({ editID, setEditID }) => {
         },
       },
     });
-    console.log(result);
+    try {
+      const response = await fetch(`/api/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ publicId: [editItem.photo[0].publicId] }),
+      });
+
+      toast.success("Nueva imagen subida");
+    } catch (error) {
+      alert("Error al eliminar imagen");
+      return;
+    }
+
+    setIsLoading(false);
+    toast.success("Categoria actualizada");
 
     queryClient.invalidateQueries("AllCategories");
     setCategoryName("");
@@ -297,6 +333,7 @@ const CreateCategory = ({ editID, setEditID }) => {
 
           <div className="mb-4">
             <input
+              required
               ref={inputFileRef}
               className=" bg-gray-100 rounded-md"
               multiple
@@ -308,8 +345,17 @@ const CreateCategory = ({ editID, setEditID }) => {
           </div>
 
           <div className="">
-            <button className="bg-green-500 text-white px-5 py-2 rounded-md ">
-              {editItem ? "Update category" : "Create Category"}
+            <button
+              className="bg-green-500 text-white px-5 py-2 rounded-md flex justify-center items-center"
+              style={{ minWidth: 100 }}
+            >
+              {isLoading ? (
+                <CircularProgress size={20} style={{ color: "white" }} />
+              ) : editItem ? (
+                "Update category"
+              ) : (
+                "Create Category"
+              )}
             </button>
             {editItem && (
               <div

@@ -10,6 +10,7 @@ import { deleteCategory, getAllCategories } from "@/utils/graphqlFunctions";
 import Link from "next/link";
 import Image from "next/image";
 import { Table } from "flowbite-react";
+import { toast } from "react-toastify";
 
 Amplify.configure(amplifyconfig);
 
@@ -20,7 +21,7 @@ const CategoriesTable = ({ setEditID }) => {
   const { mutate, isSuccess } = useMutation(deleteCategory, {
     onSuccess: () => {
       queryClient.invalidateQueries("AllCategories");
-      alert("Categoria Eliminada");
+      toast.warn("Categoria eliminada");
     },
   });
 
@@ -31,7 +32,6 @@ const CategoriesTable = ({ setEditID }) => {
     if (categoriaFiltrada && window.confirm("¿Eliminar Categoria?")) {
       if (categoriaFiltrada.photo) {
         try {
-          console.log(filter[0].photo.publicId);
           const response = await fetch(`/api/delete`, {
             method: "POST",
             headers: {
@@ -40,7 +40,6 @@ const CategoriesTable = ({ setEditID }) => {
             body: JSON.stringify({ publicId: [filter[0].photo[0].publicId] }),
           });
 
-          console.log("Imagen Borrada", response);
           mutate(id);
         } catch (error) {
           console.error("Error de red al eliminar la imagen desde page", error);
@@ -53,6 +52,7 @@ const CategoriesTable = ({ setEditID }) => {
 
   const edithandler = (id) => {
     setEditID(id);
+    window.scroll(0, 0);
   };
 
   return (

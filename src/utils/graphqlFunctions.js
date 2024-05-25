@@ -80,7 +80,6 @@ export async function deleteProductFunction(id) {
 }
 
 export async function newCategory({ categoryName, description, photo }) {
-  console.log(photo);
   // if (typeof price !== "number" || isNaN(price)) {
   //   console.error('Error: El valor de "price" no es un número válido.');
   //   throw new Error('Error: El valor de "price" no es un número válido.');
@@ -116,7 +115,6 @@ export async function deleteCategory(id) {
 }
 
 export async function getCategoria(id) {
-  console.log(id);
   const res = await client.graphql({
     query: getCategories,
     variables: { id },
