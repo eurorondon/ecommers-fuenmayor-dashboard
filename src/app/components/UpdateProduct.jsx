@@ -13,7 +13,6 @@ import SwitchSellers from "./SwitchOffer";
 import { handleDeleteImage, handleSubmit, handleUpdate } from "./querys";
 import { CircularProgress } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();

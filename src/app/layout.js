@@ -7,6 +7,7 @@ import FlowNavbar from "./components/FlowNavbar";
 import DrawerMenu from "./components/DrawerMenu";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
