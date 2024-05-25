@@ -69,7 +69,6 @@ export async function POST(request) {
     if (parts.length === 2) {
       imageUrl = `${parts[0]}/upload/f_auto,q_auto:low/${parts[1]}`;
     }
-    console.log(imageUrl);
 
     const res = {
       url: imageUrl,
