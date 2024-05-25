@@ -15,6 +15,7 @@ import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import amplifyconfig from "@/aws-exports";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { toast } from "react-toastify";
 
 function Productos() {
   Amplify.configure(amplifyconfig);
@@ -104,6 +105,7 @@ function Productos() {
           body: JSON.stringify({ publicId: publicId }),
         });
         // console.log(response);
+        toast.warn("Producto Eliminado");
       } catch (error) {
         console.error("Error de red al eliminar la imagen desde page", error);
       }

@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import Product from "@/app/components/Product";
 import { deleteProductFunction } from "@/utils/graphqlFunctions";
+import { toast } from "react-toastify";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -38,15 +39,19 @@ function Page() {
           },
           body: JSON.stringify({ publicId: publicId }),
         });
+
         // console.log(response);
+
+        try {
+          mutate(id);
+          queryClient.invalidateQueries(`infinity-products-${categoria}`);
+        } catch (error) {
+          console.log(error);
+        }
+        toast.warn("Producto Eliminado");
       } catch (error) {
         console.error("Error de red al eliminar la imagen desde page", error);
-      }
-      try {
-        mutate(id);
-        queryClient.invalidateQueries(`infinity-products-${categoria}`);
-      } catch (error) {
-        console.log(error);
+        toast.error("Error al eliminar producto");
       }
     }
   };

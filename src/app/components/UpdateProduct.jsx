@@ -104,40 +104,57 @@ function UpdateProduct({ hasEdit, productId }) {
     }
   };
 
-  const handleClickUpdate = () => {
-    handleUpdate(
-      name,
-      price,
-      countInStock,
-      category,
-      description,
-      toggle,
-      discountPercentage,
-      bestSellers,
-      file,
-      imageUrl,
-      productId,
-      queryClient,
-      inputFileRef,
-      setIsLoading,
-      setFile
-    );
+  const handleClickUpdate = async () => {
+    try {
+      await handleUpdate(
+        name,
+        price,
+        countInStock,
+        category,
+        description,
+        toggle,
+        discountPercentage,
+        bestSellers,
+        file,
+        imageUrl,
+        productId,
+        queryClient,
+        inputFileRef,
+        setIsLoading,
+        setFile
+      );
+
+      toast.success("Producto Actualizado");
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("Error al actualizar producto");
+    }
+
     // router.push("/productos");
   };
 
-  const handleClickDeleteImage = (id) => {
-    handleDeleteImage(
-      id,
-      imageUrl,
-      productId,
-      name,
-      category,
-      price,
-      toggle,
-      discountPercentage,
-      bestSellers,
-      queryClient
-    );
+  const handleClickDeleteImage = async (id) => {
+    const userConfirmed = window.confirm("¿Seguro de Eliminar esta Imagen?");
+    if (userConfirmed) {
+      try {
+        await handleDeleteImage(
+          id,
+          imageUrl,
+          productId,
+          name,
+          category,
+          price,
+          toggle,
+          discountPercentage,
+          bestSellers,
+          queryClient
+        );
+        toast.warning("Producto Eliminado");
+      } catch (error) {
+        console.log(error);
+        toast.error("Error al eliminar producto");
+      }
+    }
   };
 
   // React.useEffect(() => {

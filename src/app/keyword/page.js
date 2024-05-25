@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import Product from "../components/Product";
 import { deleteProductFunction } from "@/utils/graphqlFunctions";
+import { toast } from "react-toastify";
 
 function Page() {
   const searchParams = useSearchParams();
@@ -65,14 +66,18 @@ function Page() {
           body: JSON.stringify({ publicId: publicId }),
         });
         // console.log(response);
+        toast.warn("Producto Eliminado");
       } catch (error) {
         console.error("Error de red al eliminar la imagen desde page", error);
+        toast.error("Error al eliminar producto");
       }
       try {
         mutate(id);
         queryClient.invalidateQueries(`Keyword`);
+        // toast.warn("Producto Eliminado");
       } catch (error) {
         console.log(error);
+        // toast.error("Error al eliminar producto");
       }
     }
   };

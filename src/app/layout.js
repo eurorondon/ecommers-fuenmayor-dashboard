@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
             <FlowNavbar />
           </div>
           <div className=" lg:flex lg:flex-row ">
-            <ToastContainer autoClose={4000} />
+            <ToastContainer autoClose={2500} />
             {/* <div className="  "> */}
             {/* <div className="w-1/6"> */}
             <div className="lg:basis-2/12  ">
