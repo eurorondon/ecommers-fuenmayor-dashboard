@@ -12,6 +12,8 @@ import SwitchOffer from "./SwitchOffer";
 import SwitchSellers from "./SwitchOffer";
 import { handleDeleteImage, handleSubmit, handleUpdate } from "./querys";
 import { CircularProgress } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
@@ -92,10 +94,12 @@ function UpdateProduct({ hasEdit, productId }) {
         mutate
       );
       // Si handleSubmit tiene un manejo de éxito interno y no arroja un error, entonces puedes continuar aquí después de que se complete.
-      alert("Producto publicado con Exito");
+      // alert("Producto publicado con Exito");
+      toast.success("Producto publicado con Exito");
     } catch (error) {
       setIsLoading(false);
-      alert("Error" + (error.message || "Error desconocido"));
+      toast.error("Error al subir producto");
+      // alert("Error" + (error.message || "Error desconocido"));
       console.log(error);
     }
   };

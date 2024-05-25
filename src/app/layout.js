@@ -6,6 +6,7 @@ import SidebarUi from "./components/Sidebar";
 import FlowNavbar from "./components/FlowNavbar";
 import DrawerMenu from "./components/DrawerMenu";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
             <FlowNavbar />
           </div>
           <div className=" lg:flex lg:flex-row ">
+            <ToastContainer autoClose={4000} />
             {/* <div className="  "> */}
             {/* <div className="w-1/6"> */}
             <div className="lg:basis-2/12  ">
