@@ -27,7 +27,7 @@ function Page() {
         const res = await client.graphql({
           query: listProducts,
           variables: {
-            limit: 200,
+            limit: 500,
             filter: { name: { contains: search } },
             // nextToken: pageParam,
           },
