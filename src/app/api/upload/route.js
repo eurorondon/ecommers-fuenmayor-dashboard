@@ -44,12 +44,13 @@ export async function POST(request) {
           .upload(fileUri, {
             folder: "Next.js",
             invalidate: true,
+            transformation: [{ fetch_format: "auto" }],
             // quality_analysis: true,
 
             // base64: true,
           })
           .then((result) => {
-            console.log(result);
+            // console.log(result);
             resolve(result);
           })
           .catch((error) => {
@@ -63,11 +64,23 @@ export async function POST(request) {
 
     let imageUrl = result.secure_url;
 
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    // Modificar la URL para incluir f_auto,q_auto, esto para que clodinary optimice la imagen
+    const parts = imageUrl.split("/upload/");
+    if (parts.length === 2) {
+      imageUrl = `${parts[0]}/upload/f_auto,q_auto:low/${parts[1]}`;
+    }
+    console.log(imageUrl);
+
+    const res = {
+      url: imageUrl,
+      publicId: result.public_id,
+    };
+
+    return NextResponse.json({ success: true, data: res }, { status: 200 });
   } catch (error) {
     console.log("server err", error);
     return NextResponse.json(
-      { err: error.message, info: "Internal Server Error custom" },
+      { err: error.message, info: "Internal Server Error " },
       { status: 500 }
     );
   }

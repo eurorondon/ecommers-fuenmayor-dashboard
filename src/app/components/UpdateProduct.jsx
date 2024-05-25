@@ -145,8 +145,6 @@ function UpdateProduct({ hasEdit, productId }) {
   //   }
   // }, [isSuccess, isError]);
 
-  console.log(isLoadingMutate, isSuccess);
-
   return (
     <div className=" flex justify-center py-5  ">
       <div className="bg-white p-5 border rounded-lg shadow-lg ">
