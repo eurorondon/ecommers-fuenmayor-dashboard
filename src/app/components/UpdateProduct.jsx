@@ -368,7 +368,7 @@ function UpdateProduct({ hasEdit, productId }) {
             </div>
 
             <button
-              disabled={isLoading && true}
+              disabled={isLoading}
               className="bg-slate-950 text-white px-5 py-2 rounded-md flex justify-center items-center"
               onClick={hasEdit ? handleClickUpdate : handleClickForm}
               style={{ minWidth: 100 }}

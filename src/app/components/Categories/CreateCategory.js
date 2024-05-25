@@ -298,11 +298,14 @@ const CreateCategory = ({ editID, setEditID }) => {
   return (
     <div className="">
       <div className="bg-white p-5 border rounded-lg shadow-lg ">
+        <div className="m-5">
+          <h1 className="text-xl text-center font-semibold">Nueva Categoria</h1>
+        </div>
         <form onSubmit={editID ? handleUpdate : submitHandler}>
-          <div className="">
+          <div className="mb-4">
             <label
               htmlFor="product_title"
-              className="block   text-sm font-bold mt-2"
+              className="block   text-sm font-semibold mt-2"
             >
               Nombre de Categoria
             </label>
@@ -317,35 +320,37 @@ const CreateCategory = ({ editID, setEditID }) => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block   text-sm font-bold mt-2">
+          <div>
+            {/* <label className="block   text-sm font-bold mt-2">
               Descripcion
-            </label>
-            <textarea
+            </label> */}
+            {/* <textarea
               placeholder="Escribir aqui"
               className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
               rows="2"
               // required
               value={description}
               onChange={handleDescripcionChange}
-            ></textarea>
+            /> */}
           </div>
 
           <div className="mb-4">
             <input
               required
               ref={inputFileRef}
-              className=" bg-gray-100 rounded-md"
+              className="bg-gray-100 rounded-md overflow-hidden text-ellipsis whitespace-nowrap px-2"
               multiple
               type="file"
               onChange={(e) => {
                 setFile(e.target.files[0]);
               }}
+              style={{ width: "100%", maxWidth: "300px" }}
             />
           </div>
 
-          <div className="">
+          <div className="mt-16">
             <button
+              disabled={isLoading}
               className="bg-green-500 text-white px-5 py-2 rounded-md flex justify-center items-center"
               style={{ minWidth: 100 }}
             >
