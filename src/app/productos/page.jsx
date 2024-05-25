@@ -20,6 +20,7 @@ import { Table } from "flowbite-react";
 import Image from "next/image";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import Link from "next/link";
 
 function Productos() {
   Amplify.configure(amplifyconfig);
@@ -197,17 +198,25 @@ function Productos() {
                 </Table.Cell>
                 <Table.Cell className="flex   justify-center  gap-2">
                   <button
-                    onClick={() => deletehandler(category.id)}
+                    onClick={() => handleDelete(product.id)}
                     className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md"
                   >
                     <MdDelete size={24} />
                   </button>
-                  <button
+
+                  <Link
+                    href={`/product/${product.id}/edit`}
+                    className="bg-green-500 mr-2 text-white  flex items-center justify-center px-3 py-3 lg:px-3 lg:py-2 rounded-md hover:bg-green-600 p-2 pb-3 col-span-6 md:col-span-3"
+                  >
+                    <FaEdit size={24} />
+                  </Link>
+                  {/* <button
                     onClick={() => edithandler(category.id)}
                     className="btn btn-success bg-green-500 text-white py-1 px-2 rounded-md"
                   >
-                    <FaEdit size={24} />
-                  </button>
+
+                   
+                  </button> */}
                 </Table.Cell>
               </Table.Row>
             ))}
