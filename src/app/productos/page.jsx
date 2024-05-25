@@ -172,10 +172,10 @@ function Productos() {
             {products?.map((product) => (
               <Table.Row
                 key={product.id}
-                className="flex justify-between relative items-center pt-10"
+                className="flex justify-between relative items-center "
               >
                 <Table.Cell>
-                  <span className="absolute top-3 text-lg font-semibold">
+                  <span className=" absolute font-bold left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
                     {[product.name]}
                   </span>
                   <Image
@@ -188,8 +188,8 @@ function Productos() {
                         : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
                     }
                     alt="img"
-                    width={100}
-                    height={120}
+                    width={80}
+                    height={80}
                   />
                 </Table.Cell>
                 <Table.Cell className="font-extrabold">
