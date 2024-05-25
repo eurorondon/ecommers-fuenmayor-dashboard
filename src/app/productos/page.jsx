@@ -16,6 +16,10 @@ import { generateClient } from "aws-amplify/api";
 import amplifyconfig from "@/aws-exports";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { toast } from "react-toastify";
+import { Table } from "flowbite-react";
+import Image from "next/image";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 function Productos() {
   Amplify.configure(amplifyconfig);
@@ -138,7 +142,7 @@ function Productos() {
         //   </div>
         // }
       >
-        <div className=" grid grid-cols-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-col-4 xl:grid-cols-5 md:p-10 lg:p-10 p-2 gap-0   ">
+        {/* <div className=" grid grid-cols-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-col-4 xl:grid-cols-5 md:p-10 lg:p-10 p-2 gap-0   ">
           {products?.map((product) => (
             <div key={product.id}>
               <div
@@ -161,7 +165,53 @@ function Productos() {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
+
+        <Table>
+          <Table.Body className="divide-y">
+            {products?.map((product) => (
+              <Table.Row
+                key={product.id}
+                className="flex justify-between items-center"
+              >
+                <Table.Cell>
+                  <Image
+                    src={
+                      product &&
+                      product.photo &&
+                      product.photo[0] &&
+                      product.photo[0].url
+                        ? product.photo[0].url
+                        : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
+                    }
+                    alt="img"
+                    width={100}
+                    height={120}
+                  />
+                </Table.Cell>
+                <Table.Cell>
+                  <b>{product.name}</b>
+                  <br />
+                  {product.price} $
+                </Table.Cell>
+                <Table.Cell className="flex flex-col  justify-center  gap-2">
+                  <button
+                    onClick={() => deletehandler(category.id)}
+                    className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded-md"
+                  >
+                    <MdDelete size={24} />
+                  </button>
+                  <button
+                    onClick={() => edithandler(category.id)}
+                    className="btn btn-success bg-green-500 text-white py-1 px-2 rounded-md"
+                  >
+                    <FaEdit size={24} />
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
       </InfiniteScroll>
     </>
   );
