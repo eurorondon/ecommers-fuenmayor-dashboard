@@ -102,8 +102,8 @@ function Page() {
 
   console.log(isLoading);
 
-  if (cargando) return <Loader />;
-  // if (isLoading) return <Loader />;
+  // if (cargando) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="bg-white" style={{ minHeight: "100vh" }}>
