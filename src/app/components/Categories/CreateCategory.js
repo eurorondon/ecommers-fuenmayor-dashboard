@@ -10,7 +10,8 @@ import {
   newCategory,
 } from "@/utils/graphqlFunctions";
 import { toast } from "react-toastify";
-import { CircularProgress } from "@mui/material";
+
+import { Spinner } from "flowbite-react";
 // import { createCategory } from "../../Redux/Actions/CategoryActions";
 // import { useDispatch, useSelector } from "react-redux";
 // import { CATEGORY_CREATE_RESET } from "../../Redux/Constants/CategoryConstants";
@@ -355,7 +356,7 @@ const CreateCategory = ({ editID, setEditID }) => {
               style={{ minWidth: 100 }}
             >
               {isLoading ? (
-                <CircularProgress size={20} style={{ color: "white" }} />
+                <Spinner />
               ) : editItem ? (
                 "Update category"
               ) : (

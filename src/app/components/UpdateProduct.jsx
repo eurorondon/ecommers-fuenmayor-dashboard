@@ -11,8 +11,9 @@ import {
 import SwitchOffer from "./SwitchOffer";
 import SwitchSellers from "./SwitchOffer";
 import { handleDeleteImage, handleSubmit, handleUpdate } from "./querys";
-import { CircularProgress } from "@mui/material";
+
 import { ToastContainer, toast } from "react-toastify";
+import { Spinner } from "flowbite-react";
 
 function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
@@ -326,7 +327,7 @@ function UpdateProduct({ hasEdit, productId }) {
                 htmlFor="product_price"
                 className="block   text-sm font-bold "
               >
-                Agg Descripcion
+                Agregar Descripcion
               </label>
             </div>
             {descripcion && (
@@ -391,13 +392,7 @@ function UpdateProduct({ hasEdit, productId }) {
               onClick={hasEdit ? handleClickUpdate : handleClickForm}
               style={{ minWidth: 100 }}
             >
-              {isLoading ? (
-                <CircularProgress size={20} style={{ color: "white" }} />
-              ) : hasEdit ? (
-                "Update"
-              ) : (
-                "Create"
-              )}
+              {isLoading ? <Spinner /> : hasEdit ? "Update" : "Create"}
             </button>
           </div>
         </div>

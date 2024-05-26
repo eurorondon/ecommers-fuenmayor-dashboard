@@ -9,7 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import Product from "@/app/components/Product";
 import { deleteProductFunction } from "@/utils/graphqlFunctions";
-import { toast } from "react-toastify";
+
 import { Table } from "flowbite-react";
 import Image from "next/image";
 import { MdDelete } from "react-icons/md";
@@ -17,6 +17,7 @@ import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { IoGridOutline, IoListOutline } from "react-icons/io5";
 import Loader from "@/app/components/Loader";
+import { toast } from "react-toastify";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
