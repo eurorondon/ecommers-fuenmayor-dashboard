@@ -16,6 +16,7 @@ import { MdDelete } from "react-icons/md";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { IoGridOutline, IoListOutline } from "react-icons/io5";
+import Loader from "@/app/components/Loader";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -109,6 +110,10 @@ function Page() {
       }
     );
 
+  if (isLoading) {
+    console.log(isLoading);
+  }
+
   const products =
     data?.pages.reduce(
       (prevProducts, page) => prevProducts.concat(page.items),
@@ -116,6 +121,8 @@ function Page() {
     ) ?? [];
 
   console.log(products);
+
+  if (isLoading) return <Loader />;
 
   return (
     <div>

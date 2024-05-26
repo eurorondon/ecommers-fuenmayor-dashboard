@@ -129,6 +129,8 @@ function Productos() {
       }
     }
   };
+
+  console.log(isLoading);
   if (isLoading) return <Loader />;
   return (
     <>
