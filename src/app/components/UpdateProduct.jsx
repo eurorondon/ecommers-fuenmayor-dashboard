@@ -27,6 +27,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const [toggle, setToggle] = useState(false);
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [bestSellers, setBestSellers] = useState(false);
+  const [descripcion, setDescripcion] = useState(false);
   const inputFileRef = React.useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -166,8 +167,11 @@ function UpdateProduct({ hasEdit, productId }) {
   // }, [isSuccess, isError]);
 
   return (
-    <div className=" flex justify-center py-5  ">
-      <div className="bg-white p-5 border rounded-lg shadow-lg ">
+    <div className="   ">
+      <div
+        className="bg-white  p-5  border  shadow-lg "
+        style={{ minHeight: "90vh" }}
+      >
         <div className="card  ">
           <div className="card-body">
             <div className="">
@@ -297,6 +301,7 @@ function UpdateProduct({ hasEdit, productId }) {
                 Incluir en productos mas vendidos
               </label>
             </div>
+
             <div className="mb-4">
               <label
                 htmlFor="product_price"
@@ -314,19 +319,31 @@ function UpdateProduct({ hasEdit, productId }) {
                 onChange={(e) => setCountInStock(e.target.value)}
               />
             </div>
-            <div className="mb-4">
-              <label className="block   text-sm font-bold mt-2">
-                Descripcion
+
+            <div className="flex items-center  mt-3 mb-3 gap-3">
+              <SwitchSellers toggle={descripcion} setToggle={setDescripcion} />
+              <label
+                htmlFor="product_price"
+                className="block   text-sm font-bold "
+              >
+                Agg Descripcion
               </label>
-              <textarea
-                placeholder="Escribir aqui"
-                className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-                rows="2"
-                // required
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></textarea>
             </div>
+            {descripcion && (
+              <div className="mb-4 ">
+                <label className="block   text-sm font-bold mt-2">
+                  Descripcion
+                </label>
+                <textarea
+                  placeholder="Escribir aqui"
+                  className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+                  rows="2"
+                  // required
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                ></textarea>
+              </div>
+            )}
 
             <div className="flex">
               {imageUrl &&
@@ -358,12 +375,13 @@ function UpdateProduct({ hasEdit, productId }) {
             <div className="mb-4">
               <input
                 ref={inputFileRef}
-                className=" bg-amber-300 rounded-md"
+                className="bg-gray-100 rounded-md overflow-hidden text-ellipsis whitespace-nowrap px-2"
                 multiple
                 type="file"
                 onChange={(e) => {
                   setFile(e.target.files);
                 }}
+                style={{ width: "100%", maxWidth: "300px" }}
               />
             </div>
 
