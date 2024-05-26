@@ -15,6 +15,7 @@ import { MdDelete } from "react-icons/md";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { IoGridOutline, IoListOutline } from "react-icons/io5";
+import Loader from "../components/Loader";
 
 function Page() {
   const [mosaico, setMosaico] = React.useState(false);
@@ -22,11 +23,12 @@ function Page() {
   Amplify.configure(amplifyconfig);
   const client = generateClient();
   const search = searchParams.get("search");
+  const [cargando, setCargando] = React.useState(true);
 
   console.log(search);
   const queryClient = useQueryClient();
 
-  const { data, refetch } = useQuery(
+  const { data, refetch, isLoading } = useQuery(
     [`Keywords`],
     async () => {
       try {
@@ -57,6 +59,12 @@ function Page() {
       refetch();
     },
   });
+
+  React.useEffect(() => {
+    if (isLoading) {
+      setCargando(false);
+    }
+  }, [isLoading]);
 
   const handleDelete = async (id, photo) => {
     const publicId = photo.map((item) => item.publicId);
@@ -92,8 +100,12 @@ function Page() {
     refetch({ search }); // refetch with the new search value
   }, [search, refetch]);
 
+  console.log(isLoading);
+
+  if (cargando) return <Loader />;
+
   return (
-    <div className="bg-white">
+    <div className="bg-white" style={{ minHeight: "100vh" }}>
       <div className=" flex justify-end items-center   ">
         <span className="font-bold">View Options</span>
         {mosaico ? (

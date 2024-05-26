@@ -24,6 +24,8 @@ import Link from "next/link";
 import React from "react";
 import { IoGridOutline } from "react-icons/io5";
 import { IoListOutline } from "react-icons/io5";
+import { CircularProgress } from "@mui/material";
+import Loader from "../components/Loader";
 
 function Productos() {
   Amplify.configure(amplifyconfig);
@@ -127,17 +129,9 @@ function Productos() {
       }
     }
   };
-
+  if (isLoading) return <Loader />;
   return (
     <>
-      {/* <div className="  grid grid-cols-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 md:p-10 lg:p-10 p-2 gap-0  ">
-        {products &&
-          products.map((product) => (
-            <div className="z-0" key={product.id}>
-              <Product product={product} handleDelete={handleDelete} />
-            </div>
-          ))}
-      </div> */}
       <div className=" flex justify-end items-center  bg-white ">
         <span className="font-bold">View Options</span>
         {mosaico ? (
@@ -160,7 +154,7 @@ function Productos() {
         next={() => fetchNextPage()}
         // loader={
         //   <div className="mx-auto">
-        //     <Loading />
+        //     <CircularProgress />
         //   </div>
         // }
       >

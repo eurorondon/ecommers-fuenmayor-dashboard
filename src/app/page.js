@@ -15,9 +15,12 @@ import DrawerMenu from "./components/DrawerMenu";
 
 const MenuHamburguesa = () => {
   return (
-    <>
-      <h1>hola</h1>
-    </>
+    <div
+      className="bg-white flex justify-center items-center"
+      style={{ height: "90vh" }}
+    >
+      <h1 className="text-4xl font-extrabold">Bienvenido</h1>
+    </div>
   );
 };
 
