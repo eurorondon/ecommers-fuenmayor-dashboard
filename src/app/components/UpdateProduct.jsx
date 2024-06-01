@@ -99,7 +99,9 @@ function UpdateProduct({ hasEdit, productId }) {
       toast.success("Producto publicado con Exito");
     } catch (error) {
       setIsLoading(false);
-      toast.error("Error al subir producto");
+      toast.error(`Error al subir producto: ${error.message}`, {
+        autoClose: "false",
+      });
       // alert("Error" + (error.message || "Error desconocido"));
       console.log(error);
     }
