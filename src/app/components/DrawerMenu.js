@@ -67,6 +67,7 @@ function DrawerMenu() {
             height={50}
             alt="Multitienda"
             className="rounded-full"
+            priority
           />
         </div>
 

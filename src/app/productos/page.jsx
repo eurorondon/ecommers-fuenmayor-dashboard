@@ -209,7 +209,9 @@ function Productos() {
                       alt="img"
                       width={80}
                       height={80}
-                      loading="lazy"
+                      style={{ width: "auto", height: "auto" }} // Mantén la proporción
+                      // loading="lazy"
+                      priority="false"
                     />
                   </Table.Cell>
                   <Table.Cell className="font-extrabold">
