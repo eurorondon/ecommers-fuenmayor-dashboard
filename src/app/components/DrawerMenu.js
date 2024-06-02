@@ -22,9 +22,15 @@ function DrawerMenu() {
   const [searchInput, setSearchInput] = React.useState("");
   const router = useRouter();
 
+  const capitalizeFirstLetter = (str) => {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push(`/keyword?search=${searchInput}`);
+    const capitalizedName = capitalizeFirstLetter(searchInput);
+    router.push(`/keyword?search=${capitalizedName}`);
     setSearchInput("");
   };
 
@@ -50,7 +56,7 @@ function DrawerMenu() {
             <input
               type="search"
               className="form-control rounded-left search w-11/12 "
-              placeholder="Search"
+              placeholder="Buscar..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />

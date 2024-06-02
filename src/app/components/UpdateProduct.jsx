@@ -79,11 +79,17 @@ function UpdateProduct({ hasEdit, productId }) {
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
+  const capitalizeFirstLetter = (str) => {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   const handleClickForm = async () => {
     setIsLoading(true);
+    const capitalizedName = capitalizeFirstLetter(name);
     try {
       await handleSubmit(
-        name,
+        capitalizedName,
         price,
         countInStock,
         category,
@@ -108,9 +114,10 @@ function UpdateProduct({ hasEdit, productId }) {
   };
 
   const handleClickUpdate = async () => {
+    const capitalizedName = capitalizeFirstLetter(name);
     try {
       await handleUpdate(
-        name,
+        capitalizedName,
         price,
         countInStock,
         category,
