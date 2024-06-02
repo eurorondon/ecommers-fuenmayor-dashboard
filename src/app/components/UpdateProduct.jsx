@@ -72,7 +72,8 @@ function UpdateProduct({ hasEdit, productId }) {
   } = useMutation(newProduct, {
     onSuccess: () => {
       setIsLoading(false);
-      setName(""), setPrice(""), router.push("/productos");
+      setName(""), setPrice("");
+      // , router.push("/productos");
     },
   });
 
@@ -100,8 +101,7 @@ function UpdateProduct({ hasEdit, productId }) {
         file,
         mutate
       );
-      // Si handleSubmit tiene un manejo de éxito interno y no arroja un error, entonces puedes continuar aquí después de que se complete.
-      // alert("Producto publicado con Exito");
+
       toast.success("Producto publicado con Exito");
     } catch (error) {
       setIsLoading(false);
