@@ -10,8 +10,12 @@ cloudinary.config({
 export async function POST(request) {
   const data = await request.json();
 
+  console.log(data);
+
   try {
-    // Itera sobre cada publicId y elimina las imágenes correspondientes
+    // Verificar si data.publicId es un arreglo antes de intentar iterar sobre él
+
+    // Iterar sobre cada publicId y eliminar las imágenes correspondientes
     const responses = await Promise.all(
       data.publicId.map(async (publicId) => {
         const response = await cloudinary.uploader.destroy(publicId);
@@ -19,7 +23,7 @@ export async function POST(request) {
       })
     );
 
-    console.log(responses); // Las respuestas de Cloudinary para cada eliminación
+    console.log("respuesta success backend", responses); // Las respuestas de Cloudinary para cada eliminación
 
     return NextResponse.json({
       message: "Imágenes eliminadas correctamente",
@@ -31,11 +35,4 @@ export async function POST(request) {
       error: "Error al eliminar las imágenes",
     });
   }
-
-  // const response = await cloudinary.uploader.destroy(data.publicId);
-  // console.log(response);
-  // return NextResponse.json({
-  //   message: "imagen Eliminada",
-  //   data: response,
-  // });
 }

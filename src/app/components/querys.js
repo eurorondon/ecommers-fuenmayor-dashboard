@@ -8,67 +8,39 @@ import { toast } from "react-toastify";
 Amplify.configure(amplifyconfig);
 const client = generateClient();
 
-export const handleSubmit = async (
-  name,
-  price,
-  countInStock,
-  category,
-  description,
-  toggle,
-  discountPercentage,
-  bestSellers,
-  file,
-  mutate
-) => {
+export const handleSubmit = async (file) => {
   let photo = [];
   try {
-    if (file) {
-      if (file.length > 0) {
-        for (let i = 0; i < file.length; i++) {
-          const formData = new FormData();
-          formData.append("file", file[i]);
+    if (file && file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
+        const formData = new FormData();
+        formData.append("file", file[i]);
 
-          const response = await fetch("/api/upload", {
-            method: "POST",
-            body: formData,
-          });
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            return new Error(errorData.err || "Upload failed");
-          }
-
-          const data = await response.json();
-          console.log(data);
-
-          photo.push({
-            url: data.data.url,
-            publicId: data.data.publicId,
-          });
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error al subir archivo:", errorData.err);
+          // Lanzar una excepción en caso de error
+          throw new Error(errorData.err || "Upload failed");
         }
+
+        const data = await response.json();
+
+        photo.push({
+          url: data.data.url,
+          publicId: data.data.publicId,
+        });
       }
     }
-
-    mutate(
-      {
-        name,
-        price,
-        countInStock,
-        categories: [category],
-        photo,
-        description: description,
-        inOffer: toggle,
-        discountPercentage,
-        bestSellers,
-      },
-      {
-        onError: (error) => {
-          return new Error(error.message || "Upload failed");
-        },
-      }
-    );
+    return photo;
   } catch (error) {
-    return new Error(error.message || "Upload failed");
+    console.error("Error en handleSubmit:", error);
+    // Lanzar el error para que sea capturado por el código que llama a handleSubmit
+    throw error;
   }
 };
 

@@ -67,31 +67,39 @@ function Page() {
   }, [isLoading]);
 
   const handleDelete = async (id, photo) => {
-    const publicId = photo.map((item) => item.publicId);
+    let publicIds = [];
+    if (photo && Array.isArray(photo) && photo.length > 0) {
+      // Si hay fotos asociadas al producto, obtener los publicIds para eliminarlas
+      publicIds = photo.map((item) => item.publicId);
+    }
 
     const userConfirmed = window.confirm("¿Seguro de Eliminar este Producto?");
     if (userConfirmed) {
       try {
-        const response = await fetch(`/api/delete`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ publicId: publicId }),
-        });
-        // console.log(response);
-        toast.warn("Producto Eliminado");
+        // Si hay publicIds (fotos asociadas), intentar eliminarlas
+        if (publicIds.length > 0) {
+          const response = await fetch(`/api/delete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ publicId: publicIds }),
+          });
+          toast.warn("Fotos del producto eliminadas");
+        }
+
+        // Eliminar el producto independientemente de si había fotos o no
+        try {
+          mutate(id);
+          queryClient.invalidateQueries(`Keyword`);
+          toast.warn("Producto Eliminado");
+        } catch (error) {
+          console.error("Error al eliminar producto:", error);
+          toast.error("Error al eliminar producto");
+        }
       } catch (error) {
-        console.error("Error de red al eliminar la imagen desde page", error);
-        toast.error("Error al eliminar producto");
-      }
-      try {
-        mutate(id);
-        queryClient.invalidateQueries(`Keyword`);
-        // toast.warn("Producto Eliminado");
-      } catch (error) {
-        console.log(error);
-        // toast.error("Error al eliminar producto");
+        console.error("Error de red al eliminar las fotos:", error);
+        toast.error("Error al eliminar las fotos del producto");
       }
     }
   };
@@ -142,7 +150,13 @@ function Page() {
               >
                 <Product
                   id={product.id}
-                  url={product?.photo[0]?.url}
+                  url={
+                    product?.photo &&
+                    Array.isArray(product.photo) &&
+                    product.photo[0]
+                      ? product.photo[0].url
+                      : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
+                  }
                   name={product.name}
                   description={product.description}
                   price={product.price}

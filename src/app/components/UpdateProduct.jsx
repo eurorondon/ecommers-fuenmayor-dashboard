@@ -31,12 +31,13 @@ function UpdateProduct({ hasEdit, productId }) {
   const [descripcion, setDescripcion] = useState(false);
   const inputFileRef = React.useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [photoArray, setPhotoArray] = useState(null);
 
   const queryClient = useQueryClient();
   const fileInputRef = useRef(null);
 
   // get product
-  const { data, status, error } = useQuery(
+  const { data, status } = useQuery(
     ["GetProduct", productId],
     () => productDetails(productId),
     {
@@ -69,29 +70,34 @@ function UpdateProduct({ hasEdit, productId }) {
     isLoading: isLoadingMutate,
     isSuccess,
     isError,
-    error: errorMutate,
+    error,
   } = useMutation(newProduct, {
     onSuccess: () => {
       setIsLoading(false);
-      setName(""), setPrice(0.0);
-      setFile(null);
-      // , router.push("/productos");
+      setName("");
+      setPrice(0.0);
+      setCountInStock(0);
+      setToggle(false);
+      setDescripcion(false);
+      setBestSellers(false);
+      toast.success("Producto publicado con éxito");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     },
-    onError: () => {
-      toast.error(errorMutate.errors?.[0]?.message);
+    onError: (error) => {
+      // const errorMessage = "Error desconocido";
+      // toast.error(errorMessage);
       setIsLoading(false);
     },
   });
 
   React.useEffect(() => {
-    if (isError) {
-      const errorMessage =
-        errorMutate.errors?.[0]?.message ||
-        error.message ||
-        "Error desconocido";
-      console.log(errorMessage);
+    if (isSuccess === "false") {
+      // toast.error(errorMutate.errors[0].message);
+      alert(error?.errors[0].message);
     }
-  }, [error.message, isError, errorMutate.errors]);
+  }, [isError, error, isSuccess]);
 
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
@@ -106,33 +112,93 @@ function UpdateProduct({ hasEdit, productId }) {
   const handleClickForm = async () => {
     setIsLoading(true);
     const capitalizedName = capitalizeFirstLetter(name);
-    try {
-      await handleSubmit(
-        capitalizedName,
-        price,
-        countInStock,
-        category,
-        description,
-        toggle,
-        discountPercentage,
-        bestSellers,
-        file,
-        mutate
-      );
 
-      toast.success("Producto publicado con Exito");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+    try {
+      const result = await handleSubmit(file);
+      console.log(result);
+      const photo = result;
+
+      mutate(
+        {
+          name: capitalizedName,
+          price,
+          countInStock,
+          categories: [category],
+          description,
+          toggle,
+          discountPercentage,
+          bestSellers,
+          photo,
+        },
+        {
+          onError: (error) => {
+            toast.error(error.errors[0].message);
+            return;
+          },
+        }
+      );
+      if (photo && Array.isArray(photo) && photo.length > 0) {
+        const publicIds = photo.map((item) => item.publicId);
+        console.log(publicIds);
+        const array = {
+          publicId: publicIds,
+        };
+        setPhotoArray(array);
+      }
+
+      if (isError || error) {
+        try {
+          console.log(publicIds);
+
+          alert.message("Buscando Eliminar imagen");
+          const response = await fetch(`/api/delete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(array),
+          });
+          // console.log(response);
+        } catch (error) {
+          console.error("Error de red al eliminar la imagen desde page", error);
+        }
+        setIsLoading(false);
+        return;
       }
     } catch (error) {
       setIsLoading(false);
-      toast.error(`Error al subir producto: ${error.message}`, {
-        autoClose: "false",
+      const errorMessage =
+        error?.response?.data?.message ||
+        error.message ||
+        "Error al subir producto";
+      toast.error(errorMessage, {
+        autoClose: false,
       });
-      // alert("Error" + (error.message || "Error desconocido"));
-      console.log(error);
+      console.error("Error:", error);
     }
   };
+
+  React.useEffect(() => {
+    if (isError && photoArray) {
+      (async () => {
+        console.log("entrando en efect");
+        if (photoArray) {
+          await fetch(`/api/delete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(photoArray),
+          });
+          alert("Imagen eliminada");
+          setPhotoArray(null);
+        }
+      })();
+    }
+    if (isError) {
+      console.log(error);
+    }
+  }, [isError, photoArray, error]);
 
   const handleClickUpdate = async () => {
     const capitalizedName = capitalizeFirstLetter(name);
