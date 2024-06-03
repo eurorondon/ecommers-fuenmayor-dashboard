@@ -3,6 +3,7 @@ import { Amplify } from "aws-amplify";
 import amplifyconfig from "@/aws-exports";
 import { generateClient } from "aws-amplify/api";
 import { Router } from "next/router";
+import { toast } from "react-toastify";
 
 Amplify.configure(amplifyconfig);
 const client = generateClient();
@@ -34,29 +35,16 @@ export const handleSubmit = async (
 
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.err || "Upload failed");
+            return new Error(errorData.err || "Upload failed");
           }
 
           const data = await response.json();
           console.log(data);
 
-          // // Modify the URL to include f_auto,q_auto
-          // let imageUrl = data.data.url;
-          // const parts = imageUrl.split("/upload/");
-          // if (parts.length === 2) {
-          //   imageUrl = `${parts[0]}/upload/f_auto,q_auto/${parts[1]}`;
-          // }
-
           photo.push({
             url: data.data.url,
             publicId: data.data.publicId,
           });
-
-          console.log("photo is ", photo);
-          // if (data) {
-          //   console.log("publicId", data.data.publicId);
-          //   console.log("url", data.data.url);
-          // }
         }
       }
     }
@@ -73,20 +61,14 @@ export const handleSubmit = async (
         discountPercentage,
         bestSellers,
       },
-      // {
-      //   onCompleted: () => {
-      //     Router.push("/productos");
-      //   },
-      // },
       {
         onError: (error) => {
-          throw new Error(error.message || "Upload failed");
-          // alert(error.message || "Error updating product");
+          return new Error(error.message || "Upload failed");
         },
       }
     );
   } catch (error) {
-    throw new Error(error.message || "Upload failed");
+    return new Error(error.message || "Upload failed");
   }
 };
 

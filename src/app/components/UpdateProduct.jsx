@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -33,6 +33,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const queryClient = useQueryClient();
+  const fileInputRef = useRef(null);
 
   // get product
   const { data, status, error } = useQuery(
@@ -72,10 +73,25 @@ function UpdateProduct({ hasEdit, productId }) {
   } = useMutation(newProduct, {
     onSuccess: () => {
       setIsLoading(false);
-      setName(""), setPrice("");
+      setName(""), setPrice(0.0);
+      setFile(null);
       // , router.push("/productos");
     },
+    onError: () => {
+      toast.error(errorMutate.errors?.[0]?.message);
+      setIsLoading(false);
+    },
   });
+
+  React.useEffect(() => {
+    if (isError) {
+      const errorMessage =
+        errorMutate.errors?.[0]?.message ||
+        error.message ||
+        "Error desconocido";
+      console.log(errorMessage);
+    }
+  }, [isError]);
 
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
@@ -85,6 +101,8 @@ function UpdateProduct({ hasEdit, productId }) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
+  //En esta funcion conviven dos funciones , handlesubmit que sube la imagen a cloudinary, y esta
+  // mutate , que es la funcion que sube los datos a la tabla dynamo
   const handleClickForm = async () => {
     setIsLoading(true);
     const capitalizedName = capitalizeFirstLetter(name);
@@ -103,6 +121,9 @@ function UpdateProduct({ hasEdit, productId }) {
       );
 
       toast.success("Producto publicado con Exito");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       setIsLoading(false);
       toast.error(`Error al subir producto: ${error.message}`, {
@@ -388,6 +409,7 @@ function UpdateProduct({ hasEdit, productId }) {
                 className="bg-gray-100 rounded-md overflow-hidden text-ellipsis whitespace-nowrap px-2"
                 multiple
                 type="file"
+                ref={fileInputRef}
                 onChange={(e) => {
                   setFile(e.target.files);
                 }}
@@ -406,7 +428,7 @@ function UpdateProduct({ hasEdit, productId }) {
           </div>
         </div>
       </div>
-      {isError && alert(errorMutate)}
+      {/* {isError && alert(errorMutate.message)} */}
     </div>
   );
 }
