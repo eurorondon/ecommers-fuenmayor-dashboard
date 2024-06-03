@@ -34,7 +34,6 @@ function UpdateProduct({ hasEdit, productId }) {
   const [photoArray, setPhotoArray] = useState(null);
 
   const queryClient = useQueryClient();
-  const fileInputRef = useRef(null);
 
   // get product
   const { data, status } = useQuery(
@@ -81,8 +80,8 @@ function UpdateProduct({ hasEdit, productId }) {
       setDescripcion(false);
       setBestSellers(false);
       toast.success("Producto publicado con éxito");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+      if (inputFileRef.current) {
+        inputFileRef.current.value = "";
       }
     },
     onError: (error) => {
@@ -475,7 +474,6 @@ function UpdateProduct({ hasEdit, productId }) {
                 className="bg-gray-100 rounded-md overflow-hidden text-ellipsis whitespace-nowrap px-2"
                 multiple
                 type="file"
-                ref={fileInputRef}
                 onChange={(e) => {
                   setFile(e.target.files);
                 }}
