@@ -20,7 +20,7 @@ function UpdateProduct({ hasEdit, productId }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState(0);
+  const [countInStock, setCountInStock] = useState(5);
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -75,7 +75,7 @@ function UpdateProduct({ hasEdit, productId }) {
       setIsLoading(false);
       setName("");
       setPrice(0.0);
-      setCountInStock(0);
+      setCountInStock(5);
       setToggle(false);
       setDescripcion(false);
       setBestSellers(false);
@@ -110,6 +110,22 @@ function UpdateProduct({ hasEdit, productId }) {
   // mutate , que es la funcion que sube los datos a la tabla dynamo
   const handleClickForm = async () => {
     setIsLoading(true);
+    if (!name) {
+      toast.error("Inserte un titulo para el producto");
+      setIsLoading(false);
+      return;
+    }
+    if (!price) {
+      toast.error("Inserte un precio para el producto");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!file) {
+      toast.error("Inserte una Imagen para el producto");
+      setIsLoading(false);
+      return;
+    }
     const capitalizedName = capitalizeFirstLetter(name);
 
     try {
@@ -296,7 +312,7 @@ function UpdateProduct({ hasEdit, productId }) {
               </label>
               <div className="  ">
                 <select
-                  className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+                  className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:border-blue-500"
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   {category ? (
@@ -323,7 +339,7 @@ function UpdateProduct({ hasEdit, productId }) {
               <input
                 type="number"
                 placeholder="Type here"
-                className="border border-gray-300 p-2 rounded-md focus:outline-none  focus:ring focus:border-blue-500"
+                className="border border-gray-300 p-2 rounded-md focus:outline-none  focus:ring-1 focus:border-blue-500"
                 id="product_price"
                 required
                 value={price}
@@ -408,7 +424,7 @@ function UpdateProduct({ hasEdit, productId }) {
               <input
                 type="number"
                 placeholder="Type here"
-                className="border border-gray-300 p-2 rounded-md  focus:outline-none focus:ring focus:border-blue-500"
+                className="border border-gray-300 p-2 rounded-md  focus:outline-none focus:ring-1 focus:border-blue-500"
                 id="product_price"
                 // required
                 value={countInStock}
@@ -432,7 +448,7 @@ function UpdateProduct({ hasEdit, productId }) {
                 </label>
                 <textarea
                   placeholder="Escribir aqui"
-                  className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+                  className="border border-gray-500 p-2 rounded-md focus:outline-none focus:ring-1 focus:border-blue-500"
                   rows="2"
                   // required
                   value={description}
