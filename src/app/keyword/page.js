@@ -85,7 +85,7 @@ function Page() {
             },
             body: JSON.stringify({ publicId: publicIds }),
           });
-          toast.warn("Fotos del producto eliminadas");
+          // toast.warn("Fotos del producto eliminadas");
         }
 
         // Eliminar el producto independientemente de si había fotos o no

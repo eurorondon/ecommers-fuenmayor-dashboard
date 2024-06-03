@@ -280,7 +280,7 @@ function UpdateProduct({ hasEdit, productId }) {
               <input
                 type="text"
                 placeholder="Escribir aqui"
-                className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+                className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:border-blue-500"
                 id="product_title"
                 required
                 value={name}
