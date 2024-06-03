@@ -91,7 +91,7 @@ function UpdateProduct({ hasEdit, productId }) {
         "Error desconocido";
       console.log(errorMessage);
     }
-  }, [isError]);
+  }, [error.message, isError, errorMutate.errors]);
 
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
