@@ -6,7 +6,7 @@ import CategoriesTable from "./CategoriesTable";
 
 const MainCategories = () => {
   const [editID, setEditID] = React.useState("");
-  console.log(editID);
+
   return (
     <section className="mt-8">
       {/* {loading ? (

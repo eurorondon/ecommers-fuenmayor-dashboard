@@ -15,7 +15,10 @@ import { toast } from "react-toastify";
 Amplify.configure(amplifyconfig);
 
 const CategoriesTable = ({ setEditID }) => {
-  const { data } = useQuery("AllCategories", getAllCategories);
+  const { data, isError } = useQuery("AllCategories", getAllCategories);
+
+  console.log("this is data", data, isError);
+
   const queryClient = useQueryClient();
 
   const { mutate, isSuccess } = useMutation(deleteCategory, {

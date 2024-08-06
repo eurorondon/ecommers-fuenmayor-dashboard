@@ -28,6 +28,7 @@ export const createProduct = /* GraphQL */ `
       rating
       numReviews
       price
+      priceMayor
       countInStock
       createdAt
       type
@@ -35,6 +36,7 @@ export const createProduct = /* GraphQL */ `
       inOffer
       discountPercentage
       bestSellers
+      status
       id
       __typename
     }
@@ -67,6 +69,7 @@ export const updateProduct = /* GraphQL */ `
       rating
       numReviews
       price
+      priceMayor
       countInStock
       createdAt
       type
@@ -74,6 +77,7 @@ export const updateProduct = /* GraphQL */ `
       inOffer
       discountPercentage
       bestSellers
+      status
       id
       __typename
     }
@@ -106,6 +110,7 @@ export const deleteProduct = /* GraphQL */ `
       rating
       numReviews
       price
+      priceMayor
       countInStock
       createdAt
       type
@@ -113,6 +118,7 @@ export const deleteProduct = /* GraphQL */ `
       inOffer
       discountPercentage
       bestSellers
+      status
       id
       __typename
     }
@@ -126,10 +132,12 @@ export const createCategories = /* GraphQL */ `
     createCategories(input: $input, condition: $condition) {
       id
       categoryName
-      description
+      showInCarousel
+      bgColor
       photo {
         url
         publicId
+        __typename
       }
       createdAt
       updatedAt
@@ -145,10 +153,11 @@ export const updateCategories = /* GraphQL */ `
     updateCategories(input: $input, condition: $condition) {
       id
       categoryName
-      description
+      showInCarousel
+      bgColor
       photo {
-        publicId
         url
+        publicId
         __typename
       }
       createdAt
@@ -165,12 +174,217 @@ export const deleteCategories = /* GraphQL */ `
     deleteCategories(input: $input, condition: $condition) {
       id
       categoryName
-      description
+      showInCarousel
+      bgColor
       photo {
-        publicId
         url
+        publicId
         __typename
       }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      fullName
+      profilePicture
+      email
+      phoneNumber
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      fullName
+      profilePicture
+      email
+      phoneNumber
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      fullName
+      profilePicture
+      email
+      phoneNumber
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createOrder = /* GraphQL */ `
+  mutation CreateOrder(
+    $input: CreateOrderInput!
+    $condition: ModelOrderConditionInput
+  ) {
+    createOrder(input: $input, condition: $condition) {
+      idUserFilter
+      user {
+        id
+        name
+        email
+        phoneNumber
+        __typename
+      }
+      orderItems {
+        name
+        qty
+        image
+        price
+        id
+        __typename
+      }
+      shippingAddress {
+        address
+        city
+        postalCode
+        country
+        __typename
+      }
+      paymentMethod
+      paymentResult {
+        id
+        status
+        updateTime
+        emailAddress
+        __typename
+      }
+      taxPrice
+      shippingPrice
+      totalPrice
+      isPaid
+      paidAt
+      isDelivered
+      deliveredAt
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateOrder = /* GraphQL */ `
+  mutation UpdateOrder(
+    $input: UpdateOrderInput!
+    $condition: ModelOrderConditionInput
+  ) {
+    updateOrder(input: $input, condition: $condition) {
+      idUserFilter
+      user {
+        id
+        name
+        email
+        phoneNumber
+        __typename
+      }
+      orderItems {
+        name
+        qty
+        image
+        price
+        id
+        __typename
+      }
+      shippingAddress {
+        address
+        city
+        postalCode
+        country
+        __typename
+      }
+      paymentMethod
+      paymentResult {
+        id
+        status
+        updateTime
+        emailAddress
+        __typename
+      }
+      taxPrice
+      shippingPrice
+      totalPrice
+      isPaid
+      paidAt
+      isDelivered
+      deliveredAt
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteOrder = /* GraphQL */ `
+  mutation DeleteOrder(
+    $input: DeleteOrderInput!
+    $condition: ModelOrderConditionInput
+  ) {
+    deleteOrder(input: $input, condition: $condition) {
+      idUserFilter
+      user {
+        id
+        name
+        email
+        phoneNumber
+        __typename
+      }
+      orderItems {
+        name
+        qty
+        image
+        price
+        id
+        __typename
+      }
+      shippingAddress {
+        address
+        city
+        postalCode
+        country
+        __typename
+      }
+      paymentMethod
+      paymentResult {
+        id
+        status
+        updateTime
+        emailAddress
+        __typename
+      }
+      taxPrice
+      shippingPrice
+      totalPrice
+      isPaid
+      paidAt
+      isDelivered
+      deliveredAt
+      id
       createdAt
       updatedAt
       __typename

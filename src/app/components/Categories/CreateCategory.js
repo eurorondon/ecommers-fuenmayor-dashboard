@@ -337,7 +337,7 @@ const CreateCategory = ({ editID, setEditID }) => {
 
           <div className="mb-4">
             <input
-              required
+              required={editItem ? false : true}
               ref={inputFileRef}
               className="bg-gray-100 rounded-md overflow-hidden text-ellipsis whitespace-nowrap px-2"
               multiple
