@@ -29,8 +29,8 @@ function DrawerMenu() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const capitalizedName = capitalizeFirstLetter(searchInput);
-    router.push(`/keyword?search=${capitalizedName}`);
+    // const capitalizedName = capitalizeFirstLetter(searchInput);
+    router.push(`/keyword?search=${searchInput}`);
     setSearchInput("");
   };
 

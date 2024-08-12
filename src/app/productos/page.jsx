@@ -26,6 +26,7 @@ import { IoGridOutline } from "react-icons/io5";
 import { IoListOutline } from "react-icons/io5";
 
 import Loader from "../components/Loader";
+import { capitalizeFirstLetter } from "@/utils/utils";
 
 function Productos() {
   Amplify.configure(amplifyconfig);
@@ -173,6 +174,7 @@ function Productos() {
                   <Product
                     id={product.id}
                     url={product?.photo[0]?.url}
+                    // name={capitalizeFirstLetter(product.name)}
                     name={product.name}
                     description={product.description}
                     price={product.price}
@@ -181,6 +183,9 @@ function Productos() {
                     photo={product.photo}
                     handleDelete={handleDelete}
                   />
+                  {/* {data?.name !== (product.name) && "🔴"} */}
+
+                  {/[A-Z]/.test(product.name) && "🔴"}
                 </div>
               </div>
             ))}
@@ -193,8 +198,10 @@ function Productos() {
                   key={product.id}
                   className="flex justify-between relative items-center "
                 >
+                  <Table.Cell>{/[A-Z]/.test(product?.name) && "🔴"}</Table.Cell>
                   <Table.Cell>
                     <span className=" absolute font-bold left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                      {/* {[capitalizeFirstLetter(product.name)]} */}
                       {[product.name]}
                     </span>
                     <Image

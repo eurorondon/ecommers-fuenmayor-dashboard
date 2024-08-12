@@ -14,6 +14,7 @@ import { handleDeleteImage, handleSubmit, handleUpdate } from "./querys";
 
 import { ToastContainer, toast } from "react-toastify";
 import { Spinner } from "flowbite-react";
+import { capitalizeFirstLetter, toLowerCase } from "@/utils/utils";
 
 function UpdateProduct({ hasEdit, productId }) {
   const router = useRouter();
@@ -42,7 +43,7 @@ function UpdateProduct({ hasEdit, productId }) {
     {
       enabled: !!productId,
       onSuccess: (data) => {
-        setName(data.name);
+        setName(capitalizeFirstLetter(data.name));
         setCategory(data.categories ? data?.categories[0] : "");
         setPrice(data.price);
         setDescription(data.description);
@@ -101,11 +102,6 @@ function UpdateProduct({ hasEdit, productId }) {
   // Get ALl Categories
   const { data: dataCategories } = useQuery("AllCategories", getAllCategories);
 
-  const capitalizeFirstLetter = (str) => {
-    if (str.length === 0) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
   //En esta funcion conviven dos funciones , handlesubmit que sube la imagen a cloudinary, y esta
   // mutate , que es la funcion que sube los datos a la tabla dynamo
   const handleClickForm = async () => {
@@ -126,7 +122,8 @@ function UpdateProduct({ hasEdit, productId }) {
       setIsLoading(false);
       return;
     }
-    const capitalizedName = capitalizeFirstLetter(name);
+    const lowerCase = toLowerCase(name);
+    console.log(lowerCase);
 
     try {
       const result = await handleSubmit(file);
@@ -135,7 +132,7 @@ function UpdateProduct({ hasEdit, productId }) {
 
       mutate(
         {
-          name: capitalizedName,
+          name: lowerCase,
           price,
           countInStock,
           categories: [category],
@@ -145,6 +142,7 @@ function UpdateProduct({ hasEdit, productId }) {
           bestSellers,
           photo,
         },
+
         {
           onError: (error) => {
             toast.error(error.errors[0].message);
@@ -216,10 +214,11 @@ function UpdateProduct({ hasEdit, productId }) {
   }, [isError, photoArray, error]);
 
   const handleClickUpdate = async () => {
-    const capitalizedName = capitalizeFirstLetter(name);
+    const lowerCaseName = toLowerCase(name);
+
     try {
       await handleUpdate(
-        capitalizedName,
+        lowerCaseName,
         price,
         countInStock,
         category,
@@ -303,6 +302,8 @@ function UpdateProduct({ hasEdit, productId }) {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
+
+            {name === data?.name && "🔴"}
             <div className="mb-4">
               <label
                 htmlFor="product_title"

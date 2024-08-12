@@ -12,6 +12,8 @@ function FlowNavbar() {
   const [searchInput, setSearchInput] = React.useState("");
   const router = useRouter();
 
+  console.log(searchInput);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     router.push(`/keyword?search=${searchInput}`);
