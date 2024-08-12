@@ -166,11 +166,17 @@ function Productos() {
             {products?.map((product) => (
               <div key={product.id}>
                 <div
-                  style={{ cursor: "pointer" }}
+                  // style={{ cursor: "pointer", display:"none" }}
+                  style={
+                    /[A-Z]/.test(product?.name)
+                      ? { cursor: "pointer" }
+                      : { display: "none" }
+                  }
                   className=""
                   // onClick={() => handleNavigate(product.id)}
                   //  to={`/products/${product.id}`}
                 >
+                  {/[A-Z]/.test(product?.name) && "🔴"}
                   <Product
                     id={product.id}
                     url={product?.photo[0]?.url}
@@ -197,6 +203,11 @@ function Productos() {
                 <Table.Row
                   key={product.id}
                   className="flex justify-between relative items-center "
+                  style={
+                    /[A-Z]/.test(product?.name)
+                      ? { cursor: "pointer" }
+                      : { display: "none" }
+                  }
                 >
                   <Table.Cell>{/[A-Z]/.test(product?.name) && "🔴"}</Table.Cell>
                   <Table.Cell>
