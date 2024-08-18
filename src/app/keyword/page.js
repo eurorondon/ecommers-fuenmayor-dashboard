@@ -16,6 +16,7 @@ import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { IoGridOutline, IoListOutline } from "react-icons/io5";
 import Loader from "../components/Loader";
+import { toLowerCase } from "@/utils/utils";
 
 function Page() {
   const [mosaico, setMosaico] = React.useState(false);
@@ -29,14 +30,14 @@ function Page() {
   const queryClient = useQueryClient();
 
   const { data, refetch, isLoading } = useQuery(
-    [`Keywords`],
+    [`Keywords-${search}`],
     async () => {
       try {
         const res = await client.graphql({
           query: listProducts,
           variables: {
             limit: 500,
-            filter: { name: { contains: search } },
+            filter: { name: { contains: toLowerCase(search) } },
             // nextToken: pageParam,
           },
         });
