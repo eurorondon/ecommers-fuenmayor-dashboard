@@ -16,7 +16,7 @@ import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { IoGridOutline, IoListOutline } from "react-icons/io5";
 import Loader from "../components/Loader";
-import { toLowerCase } from "@/utils/utils";
+import { removeLastCharacter, toLowerCase } from "@/utils/utils";
 
 function Page() {
   const [mosaico, setMosaico] = React.useState(false);
@@ -29,6 +29,8 @@ function Page() {
   console.log(search);
   const queryClient = useQueryClient();
 
+  const search1 = removeLastCharacter(search);
+
   const { data, refetch, isLoading } = useQuery(
     [`Keywords-${search}`],
     async () => {
@@ -37,7 +39,7 @@ function Page() {
           query: listProducts,
           variables: {
             limit: 500,
-            filter: { name: { contains: toLowerCase(search) } },
+            filter: { name: { contains: toLowerCase(search1) } },
             // nextToken: pageParam,
           },
         });
