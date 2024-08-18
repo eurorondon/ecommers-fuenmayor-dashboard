@@ -20,14 +20,14 @@ function SideBarComponent({ toggleMenu }) {
       </div>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Sidebar.Item
+          {/* <Sidebar.Item
             as={Link}
             href="/"
             icon={HiChartPie}
             onClick={toggleMenu}
           >
             Dashboard
-          </Sidebar.Item>
+          </Sidebar.Item> */}
           <Sidebar.Item
             as={Link}
             href="/productos"

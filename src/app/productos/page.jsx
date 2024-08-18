@@ -166,22 +166,15 @@ function Productos() {
             {products?.map((product) => (
               <div key={product.id}>
                 <div
-                  // style={{ cursor: "pointer", display:"none" }}
-                  style={
-                    /[A-Z]/.test(product?.name)
-                      ? { cursor: "pointer" }
-                      : { display: "none" }
-                  }
+                  style={{ cursor: "pointer" }}
                   className=""
                   // onClick={() => handleNavigate(product.id)}
                   //  to={`/products/${product.id}`}
                 >
-                  {/[A-Z]/.test(product?.name) && "🔴"}
                   <Product
                     id={product.id}
                     url={product?.photo[0]?.url}
-                    // name={capitalizeFirstLetter(product.name)}
-                    name={product.name}
+                    name={capitalizeFirstLetter(product.name)}
                     description={product.description}
                     price={product.price}
                     offer={product.inOffer}
@@ -189,9 +182,6 @@ function Productos() {
                     photo={product.photo}
                     handleDelete={handleDelete}
                   />
-                  {/* {data?.name !== (product.name) && "🔴"} */}
-
-                  {/[A-Z]/.test(product.name) && "🔴"}
                 </div>
               </div>
             ))}
@@ -203,17 +193,10 @@ function Productos() {
                 <Table.Row
                   key={product.id}
                   className="flex justify-between relative items-center "
-                  style={
-                    /[A-Z]/.test(product?.name)
-                      ? { cursor: "pointer" }
-                      : { display: "none" }
-                  }
                 >
-                  <Table.Cell>{/[A-Z]/.test(product?.name) && "🔴"}</Table.Cell>
                   <Table.Cell>
                     <span className=" absolute font-bold left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
-                      {/* {[capitalizeFirstLetter(product.name)]} */}
-                      {[product.name]}
+                      {[capitalizeFirstLetter(product.name)]}
                     </span>
                     <Image
                       src={
